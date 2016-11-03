@@ -743,6 +743,7 @@ public class SuperWeChatHelper {
             user = new User(username);
             EaseCommonUtils.setAppUserInitialLetter(user);
         }
+        L.e(TAG,"user="+user);
         return user;
     }
 	
@@ -1250,8 +1251,10 @@ public class SuperWeChatHelper {
         isBlackListSyncedWithServer = false;
 
         isGroupAndContactListenerRegisted = false;
-        
+
+        currentUser = null;
         setContactList(null);
+        setAppContactList(null);
         setRobotList(null);
         getUserProfileManager().reset();
         SuperWeChatDBManager.getInstance().closeDB();
@@ -1308,6 +1311,7 @@ public class SuperWeChatHelper {
      * @return
      */
     public Map<String, User> getAppContactList() {
+        L.e(TAG,"getAppContactList,appContactList="+appContactList);
         if (isLoggedIn() && appContactList == null) {
             appContactList = demoModel.getAppContactList();
         }
@@ -1317,6 +1321,7 @@ public class SuperWeChatHelper {
             return new Hashtable<String, User>();
         }
 
+        L.e(TAG,"getAppContactList,appContactList="+appContactList.size());
         return appContactList;
     }
     /**

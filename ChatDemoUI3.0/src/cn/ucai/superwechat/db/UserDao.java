@@ -109,17 +109,6 @@ public class UserDao {
     public void saveRobotUser(List<RobotUser> robotList){
     	SuperWeChatDBManager.getInstance().saveRobotList(robotList);
     }
-	public boolean saveUser(User user){
-		return SuperWeChatDBManager.getInstance().saveUser(user);
-	}
-
-	public User getUser(String username){
-		return SuperWeChatDBManager.getInstance().getUser(username);
-	}
-
-	public boolean updateUser(User user){
-		return SuperWeChatDBManager.getInstance().updateUser(user);
-	}
 
 	public void saveAppContact(User user){
 		SuperWeChatDBManager.getInstance().saveAppContact(user);

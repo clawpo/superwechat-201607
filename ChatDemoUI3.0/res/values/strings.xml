@@ -143,4 +143,5 @@
     <string name="msg_501">msg location get fail</string>
     <string name="msg_999">msg unknow</string>
     <string name="msg_1">msg illegal request</string>
+    <string name="User_name_cannot_be_modify">user name connot be modify</string>
 </resources>

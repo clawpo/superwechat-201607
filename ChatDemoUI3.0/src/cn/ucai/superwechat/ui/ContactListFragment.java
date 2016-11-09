@@ -40,6 +40,7 @@ import cn.ucai.superwechat.R;
 import cn.ucai.superwechat.SuperWeChatHelper;
 import cn.ucai.superwechat.db.InviteMessgeDao;
 import cn.ucai.superwechat.db.UserDao;
+import cn.ucai.superwechat.utils.L;
 import cn.ucai.superwechat.utils.MFGT;
 import cn.ucai.superwechat.widget.ContactItemView;
 
@@ -216,6 +217,7 @@ public class ContactListFragment extends EaseContactListFragment {
 
 	@Override
 	public boolean onContextItemSelected(MenuItem item) {
+        L.e(TAG,"onContextItemSelected..."+item.getItemId());
 		if (item.getItemId() == R.id.delete_contact) {
 			try {
                 // delete contact

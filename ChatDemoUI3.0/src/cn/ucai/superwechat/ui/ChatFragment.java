@@ -33,7 +33,6 @@ import com.hyphenate.easeui.ui.EaseChatFragment.EaseChatFragmentHelper;
 import com.hyphenate.easeui.widget.chatrow.EaseChatRow;
 import com.hyphenate.easeui.widget.chatrow.EaseCustomChatRowProvider;
 import com.hyphenate.easeui.widget.emojicon.EaseEmojiconMenu;
-import com.hyphenate.util.EasyUtils;
 import com.hyphenate.util.PathUtil;
 
 import java.io.File;
@@ -42,6 +41,7 @@ import java.util.List;
 import java.util.Map;
 
 import cn.ucai.superwechat.Constant;
+import cn.ucai.superwechat.I;
 import cn.ucai.superwechat.R;
 import cn.ucai.superwechat.SuperWeChatHelper;
 import cn.ucai.superwechat.domain.EmojiconExampleGroupData;
@@ -103,13 +103,15 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
 
             @Override
             public void onClick(View v) {
-                if (EasyUtils.isSingleActivity(getActivity())) {
+//                if (EasyUtils.isSingleActivity(getActivity())) {
                     Intent intent = new Intent(getActivity(), MainActivity.class);
+                    intent.putExtra(I.ACTION_BACK_CONVERSATION,true);
                     startActivity(intent);
-                }
+//                }
                 onBackPressed();
             }
         });
+        titleBar.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
         ((EaseEmojiconMenu)inputMenu.getEmojiconMenu()).addEmojiconGroup(EmojiconExampleGroupData.getData());
         if(chatType == EaseConstant.CHATTYPE_GROUP){
             inputMenu.getPrimaryMenu().getEditText().addTextChangedListener(new TextWatcher() {

@@ -52,6 +52,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.ucai.superwechat.R;
+import cn.ucai.superwechat.utils.MFGT;
 
 public class GroupDetailsActivity extends BaseActivity implements OnClickListener {
 	private static final String TAG = "GroupDetailsActivity";
@@ -640,6 +641,7 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 							// Intent(GroupDetailsActivity.this,
 							// ChatActivity.class).putExtra("userId",
 							// user.getUsername()));
+							MFGT.gotoFriendProfile(GroupDetailsActivity.this,username);
 
 						}
 					}

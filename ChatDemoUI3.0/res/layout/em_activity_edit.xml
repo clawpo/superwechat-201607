@@ -7,7 +7,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/height_top_bar"
-        android:background="@color/common_top_bar_blue"
+        android:background="@color/colorPrimary"
         android:gravity="center_vertical" >
 
         <LinearLayout
@@ -35,11 +35,11 @@
             android:textSize="20sp" />
 
         <Button
-            android:layout_width="70dp"
-            android:layout_height="wrap_content"
+            style="@style/btn_titleStyle"
+            android:paddingLeft="7dp"
+            android:paddingRight="7dp"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:background="@drawable/em_mm_title_act_btn"
             android:onClick="save"
             android:text="@string/button_save"
             android:textColor="#fff"

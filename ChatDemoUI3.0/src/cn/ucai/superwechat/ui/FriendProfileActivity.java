@@ -21,11 +21,13 @@ import cn.ucai.superwechat.SuperWeChatHelper;
 import cn.ucai.superwechat.bean.Result;
 import cn.ucai.superwechat.data.NetDao;
 import cn.ucai.superwechat.data.OkHttpUtils;
+import cn.ucai.superwechat.utils.L;
 import cn.ucai.superwechat.utils.MFGT;
 import cn.ucai.superwechat.utils.ResultUtils;
 
 
 public class FriendProfileActivity extends BaseActivity {
+    private static final String TAG = FriendProfileActivity.class.getSimpleName();
 
     @BindView(R.id.img_back)
     ImageView mImgBack;
@@ -81,12 +83,14 @@ public class FriendProfileActivity extends BaseActivity {
                 if(s!=null){
                     Result result = ResultUtils.getResultFromJson(s, User.class);
                     if(result!=null && result.isRetMsg()){
-                        user = (User) result.getRetData();
-                        if(user!=null){
-                            setUserInfo();
+                        User u  = (User) result.getRetData();
+                        if(u!=null){
+                            L.e(TAG,"u="+u.getAvatar());
                             if(isFriend){
-                                SuperWeChatHelper.getInstance().saveAppContact(user);
+                                SuperWeChatHelper.getInstance().saveAppContact(u);
                             }
+                            user = u;
+                            setUserInfo();
                         }else{
                             syncFail();
                         }
@@ -121,6 +125,7 @@ public class FriendProfileActivity extends BaseActivity {
     }
 
     private void setUserInfo() {
+        L.e(TAG,"setUserInfo,user="+user.getAvatar());
         EaseUserUtils.setAppUserAvatar(this, user.getMUserName(), mProfileImage);
         EaseUserUtils.setAppUserNick(user.getMUserNick(), mTvUserinfoNick);
         EaseUserUtils.setAppUserNameWithNo(user.getMUserName(), mTvUserinfoName);

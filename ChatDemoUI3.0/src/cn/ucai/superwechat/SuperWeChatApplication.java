@@ -19,6 +19,8 @@ import android.support.multidex.MultiDex;
 
 import com.easemob.redpacketsdk.RedPacket;
 
+import cn.ucai.superwechat.openlive.model.WorkerThread;
+
 public class SuperWeChatApplication extends Application {
 
 	public static Context applicationContext;
@@ -54,5 +56,29 @@ public class SuperWeChatApplication extends Application {
 	protected void attachBaseContext(Context base) {
 		super.attachBaseContext(base);
 		MultiDex.install(this);
+	}
+	private WorkerThread mWorkerThread;
+
+	public synchronized void initWorkerThread() {
+		if (mWorkerThread == null) {
+			mWorkerThread = new WorkerThread(getApplicationContext());
+			mWorkerThread.start();
+
+			mWorkerThread.waitForReady();
+		}
+	}
+
+	public synchronized WorkerThread getWorkerThread() {
+		return mWorkerThread;
+	}
+
+	public synchronized void deInitWorkerThread() {
+		mWorkerThread.exit();
+		try {
+			mWorkerThread.join();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		mWorkerThread = null;
 	}
 }

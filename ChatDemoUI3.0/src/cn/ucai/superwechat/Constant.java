@@ -15,6 +15,8 @@ package cn.ucai.superwechat;
 
 import com.hyphenate.easeui.EaseConstant;
 
+import io.agora.rtc.RtcEngine;
+
 public class Constant extends EaseConstant{
 	public static final String NEW_FRIENDS_USERNAME = "item_new_friends";
 	public static final String GROUP_USERNAME = "item_groups";
@@ -25,4 +27,20 @@ public class Constant extends EaseConstant{
 	public static final String MESSAGE_ATTR_ROBOT_MSGTYPE = "msgtype";
 	public static final String ACTION_GROUP_CHANAGED = "action_group_changed";
 	public static final String ACTION_CONTACT_CHANAGED = "action_contact_changed";
+	public static final String MEDIA_SDK_VERSION;
+
+	static {
+		String sdk = "undefined";
+		try {
+			sdk = RtcEngine.getSdkVersion();
+		} catch (Throwable e) {
+		}
+		MEDIA_SDK_VERSION = sdk;
+	}
+
+	public static boolean PRP_ENABLED = true;
+	public static float PRP_DEFAULT_LIGHTNESS = .65f;
+	public static float PRP_DEFAULT_SMOOTHNESS = 1.0f;
+	public static final float PRP_MAX_LIGHTNESS = 1.0f;
+	public static final float PRP_MAX_SMOOTHNESS = 1.0f;
 }

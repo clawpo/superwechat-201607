@@ -22,6 +22,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
 
+import cn.ucai.superwechat.BuildConfig;
 import cn.ucai.superwechat.Constant;
 import cn.ucai.superwechat.SuperWeChatApplication;
 import cn.ucai.superwechat.openlive.model.ConstantApp;

@@ -23,11 +23,13 @@ import java.lang.ref.SoftReference;
 import java.util.HashMap;
 
 import cn.ucai.superwechat.R;
+import cn.ucai.superwechat.SuperWeChatApplication;
 import cn.ucai.superwechat.openlive.model.AGEventHandler;
 import cn.ucai.superwechat.openlive.model.ConstantApp;
 import cn.ucai.superwechat.openlive.model.EngineConfig;
 import cn.ucai.superwechat.openlive.model.MyEngineEventHandler;
 import cn.ucai.superwechat.openlive.model.VideoStatusData;
+import cn.ucai.superwechat.openlive.model.WorkerThread;
 import io.agora.rtc.Constants;
 import io.agora.rtc.RtcEngine;
 import io.agora.rtc.video.VideoCanvas;
@@ -193,7 +195,7 @@ public class LiveRoomFragment extends Fragment implements AGEventHandler {
     }
 
     @Override
-    public void onJoinChannelSuccess(String channel, int uid, int elapsed) {
+    public void onJoinChannelSuccess(final String channel, final int uid, final int elapsed) {
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -236,11 +238,11 @@ public class LiveRoomFragment extends Fragment implements AGEventHandler {
     }
 
     WorkerThread worker() {
-        return ((AGApplication) getActivity().getApplication()).getWorkerThread();
+        return ((SuperWeChatApplication) getActivity().getApplication()).getWorkerThread();
     }
 
     MyEngineEventHandler event() {
-        return ((AGApplication) getActivity().getApplication()).getWorkerThread().eventHandler();
+        return ((SuperWeChatApplication) getActivity().getApplication()).getWorkerThread().eventHandler();
     }
 
     //进行主播、视频画面的配置
@@ -299,11 +301,11 @@ public class LiveRoomFragment extends Fragment implements AGEventHandler {
     }
 
     protected final EngineConfig config() {
-        return ((AGApplication) getActivity().getApplication()).getWorkerThread().getEngineConfig();
+        return ((SuperWeChatApplication) getActivity().getApplication()).getWorkerThread().getEngineConfig();
     }
 
     protected RtcEngine rtcEngine() {
-        return ((AGApplication) getActivity().getApplication()).getWorkerThread().getRtcEngine();
+        return ((SuperWeChatApplication) getActivity().getApplication()).getWorkerThread().getRtcEngine();
     }
 
     /**

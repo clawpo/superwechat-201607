@@ -135,4 +135,11 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textSize">16sp</item>
     </style>
+
+    <style name="FullscreenTheme" parent="AppTheme">
+        <item name="windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+    </style>
 </resources>

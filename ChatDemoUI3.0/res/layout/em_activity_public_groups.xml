@@ -32,15 +32,15 @@
         
         <Button 
             android:id="@+id/btn_search"
-            android:layout_width="55dp"
-            android:layout_height="match_parent"
-            android:background="@drawable/ease_common_tab_bg"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:background="@drawable/ic_settings_white_24dp"
             android:textColor="#fff"
-            android:text="@string/search"
             android:onClick="search"
             android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"
             android:textSize="16sp"
-            android:visibility="invisible"
             />
         
     </RelativeLayout>

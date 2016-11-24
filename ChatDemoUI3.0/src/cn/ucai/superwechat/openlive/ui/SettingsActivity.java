@@ -9,18 +9,32 @@ import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import cn.ucai.superwechat.R;
 import cn.ucai.superwechat.openlive.model.ConstantApp;
+import cn.ucai.superwechat.utils.MFGT;
 
 
 public class SettingsActivity extends AppCompatActivity {
+    @BindView(R.id.img_back)
+    ImageView mImgBack;
+    @BindView(R.id.txt_title)
+    TextView mTxtTitle;
+    @BindView(R.id.img_right)
+    ImageView mImgRight;
     private ProfileAdapter profileAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
+        ButterKnife.bind(this);
 
         initUi();
     }
@@ -39,6 +53,13 @@ public class SettingsActivity extends AppCompatActivity {
         v_profiles.setLayoutManager(layoutManager);
 
         v_profiles.setAdapter(profileAdapter);
+        mImgBack.setVisibility(View.VISIBLE);
+        mTxtTitle.setVisibility(View.VISIBLE);
+        mTxtTitle.setText(getString(R.string.set));
+        mImgRight.setVisibility(View.VISIBLE);
+        mImgRight.setImageResource(R.drawable.btn_confirm_white);
+        mImgRight.setMaxHeight(25);
+        mImgRight.setMaxWidth(25);
     }
 
     @Override
@@ -70,5 +91,17 @@ public class SettingsActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = pref.edit();
         editor.putInt(ConstantApp.PrefManager.PREF_PROPERTY_PROFILE_IDX, profileIndex);
         editor.apply();
+    }
+
+    @OnClick(R.id.img_back)
+    public void onBackClick() {
+        MFGT.finish(this);
+    }
+
+    @OnClick(R.id.img_right)
+    public void onRightClick() {
+        doSaveProfile();
+
+        onBackPressed();
     }
 }

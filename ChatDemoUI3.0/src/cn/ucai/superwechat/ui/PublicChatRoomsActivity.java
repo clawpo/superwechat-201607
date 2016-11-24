@@ -41,11 +41,12 @@ import com.hyphenate.EMChatRoomChangeListener;
 import com.hyphenate.chat.EMChatRoom;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMCursorResult;
-import cn.ucai.superwechat.R;
 import com.hyphenate.exceptions.HyphenateException;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import cn.ucai.superwechat.R;
 
 public class PublicChatRoomsActivity extends BaseActivity {
 	private ProgressBar pb;
@@ -242,6 +243,7 @@ public class PublicChatRoomsActivity extends BaseActivity {
 	}
 
 	public void search(View view) {
+		forwardToSettings();
 	}
 
 	/**
@@ -312,5 +314,11 @@ public class PublicChatRoomsActivity extends BaseActivity {
 	
 	public void back(View view){
 		finish();
+	}
+
+
+	public void forwardToSettings() {
+		Intent i = new Intent(this, cn.ucai.superwechat.openlive.ui.SettingsActivity.class);
+		startActivity(i);
 	}
 }

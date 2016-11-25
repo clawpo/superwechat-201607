@@ -12,19 +12,17 @@ import android.view.ViewGroup;
 import android.view.ViewParent;
 import android.widget.FrameLayout;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.lang.ref.SoftReference;
 import java.util.ArrayList;
 import java.util.HashMap;
 import cn.ucai.superwechat.R;
 import cn.ucai.superwechat.openlive.model.VideoStatusData;
+import cn.ucai.superwechat.utils.L;
 
 
 public abstract class VideoViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private final static Logger log = LoggerFactory.getLogger(VideoViewAdapter.class);
 
     protected final LayoutInflater mInflater;
     protected final Context mContext;
@@ -86,7 +84,7 @@ public abstract class VideoViewAdapter extends RecyclerView.Adapter<RecyclerView
 
         Log.d("VideoViewAdapter", "onBindViewHolder " + position + " " + user + " " + myHolder + " " + myHolder.itemView);
 
-        log.debug("onBindViewHolder " + position + " " + user + " " + myHolder + " " + myHolder.itemView);
+        L.e("onBindViewHolder " + position + " " + user + " " + myHolder + " " + myHolder.itemView);
 
         FrameLayout holderView = (FrameLayout) myHolder.itemView;
 

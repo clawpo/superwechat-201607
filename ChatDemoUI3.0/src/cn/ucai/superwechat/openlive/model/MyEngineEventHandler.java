@@ -2,12 +2,10 @@ package cn.ucai.superwechat.openlive.model;
 
 import android.content.Context;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.util.Iterator;
 import java.util.concurrent.ConcurrentHashMap;
 
+import cn.ucai.superwechat.utils.L;
 import io.agora.rtc.IRtcEngineEventHandler;
 
 public class MyEngineEventHandler {
@@ -31,7 +29,6 @@ public class MyEngineEventHandler {
     }
 
     final IRtcEngineEventHandler mRtcEventHandler = new IRtcEngineEventHandler() {
-        private final Logger log = LoggerFactory.getLogger(this.getClass());
 
         @Override
         public void onFirstRemoteVideoDecoded(int uid, int width, int height, int elapsed) {
@@ -44,7 +41,7 @@ public class MyEngineEventHandler {
 
         @Override
         public void onFirstLocalVideoFrame(int width, int height, int elapsed) {
-            log.debug("onFirstLocalVideoFrame " + " " + width + " " + height + " " + elapsed);
+            L.e("onFirstLocalVideoFrame " + " " + width + " " + height + " " + elapsed);
         }
 
         @Override
@@ -77,18 +74,18 @@ public class MyEngineEventHandler {
 
         @Override
         public void onLastmileQuality(int quality) {
-            log.debug("onLastmileQuality " + quality);
+            L.e("onLastmileQuality " + quality);
         }
 
         @Override
         public void onError(int err) {
             super.onError(err);
-            log.debug("onError " + err);
+            L.e("onError " + err);
         }
 
         @Override
         public void onJoinChannelSuccess(String channel, int uid, int elapsed) {
-            log.debug("onJoinChannelSuccess " + channel + " " + uid + " " + (uid & 0xFFFFFFFFL) + " " + elapsed);
+            L.e("onJoinChannelSuccess " + channel + " " + uid + " " + (uid & 0xFFFFFFFFL) + " " + elapsed);
 
             Iterator<AGEventHandler> it = mEventHandlerList.keySet().iterator();
             while (it.hasNext()) {
@@ -98,11 +95,11 @@ public class MyEngineEventHandler {
         }
 
         public void onRejoinChannelSuccess(String channel, int uid, int elapsed) {
-            log.debug("onRejoinChannelSuccess " + channel + " " + uid + " " + elapsed);
+            L.e("onRejoinChannelSuccess " + channel + " " + uid + " " + elapsed);
         }
 
         public void onWarning(int warn) {
-            log.debug("onWarning " + warn);
+            L.e("onWarning " + warn);
         }
     };
 

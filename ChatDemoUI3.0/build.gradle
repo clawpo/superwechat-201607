@@ -91,5 +91,5 @@ dependencies {
     compile 'com.google.code.gson:gson:2.7'
     compile files('libs/agora-rtc-sdk.jar')
     compile project(':libvideoprp')
-    compile 'org.slf4j:slf4j-api:1.7.21'
+    //compile 'org.slf4j:slf4j-api:1.7.21'
 }

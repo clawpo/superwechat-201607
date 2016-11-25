@@ -47,6 +47,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.ucai.superwechat.R;
+import cn.ucai.superwechat.openlive.model.ConstantApp;
+import cn.ucai.superwechat.openlive.ui.LiveRoomActivity;
+import cn.ucai.superwechat.utils.L;
+import io.agora.rtc.Constants;
 
 public class PublicChatRoomsActivity extends BaseActivity {
 	private ProgressBar pb;
@@ -166,8 +170,11 @@ public class PublicChatRoomsActivity extends BaseActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 
                 final EMChatRoom room = adapter.getItem(position);
-                startActivity(new Intent(PublicChatRoomsActivity.this, ChatActivity.class).putExtra("chatType", 3).
-                		putExtra("userId", room.getId()));
+//                startActivity(new Intent(PublicChatRoomsActivity.this, ChatActivity.class).putExtra("chatType", 3).
+//                		putExtra("userId", room.getId()));
+				L.e("live","owner="+room.getOwner()+",current="+EMClient.getInstance().getCurrentUser());
+				onClickJoin(room.getOwner().equals(EMClient.getInstance().getCurrentUser())?
+						Constants.CLIENT_ROLE_BROADCASTER:Constants.CLIENT_ROLE_AUDIENCE,room.getId());
                 
             }
         });
@@ -319,6 +326,39 @@ public class PublicChatRoomsActivity extends BaseActivity {
 
 	public void forwardToSettings() {
 		Intent i = new Intent(this, cn.ucai.superwechat.openlive.ui.SettingsActivity.class);
+		startActivity(i);
+	}
+	public void onClickJoin(int clientRole,String roomId) {
+		PublicChatRoomsActivity.this.forwardToLiveRoom(clientRole,roomId);
+
+//		// show dialog to choose role
+//		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+//		builder.setMessage(R.string.msg_choose_role);
+//		builder.setNegativeButton(R.string.label_audience, new DialogInterface.OnClickListener() {
+//			@Override
+//			public void onClick(DialogInterface dialog, int which) {
+//				PublicChatRoomsActivity.this.forwardToLiveRoom(Constants.CLIENT_ROLE_AUDIENCE);
+//			}
+//		});
+//		builder.setPositiveButton(R.string.label_broadcaster, new DialogInterface.OnClickListener() {
+//			@Override
+//			public void onClick(DialogInterface dialog, int which) {
+//				PublicChatRoomsActivity.this.forwardToLiveRoom(Constants.CLIENT_ROLE_BROADCASTER);
+//			}
+//		});
+//		AlertDialog dialog = builder.create();
+//
+//		dialog.show();
+	}
+
+	public void forwardToLiveRoom(int cRole,String roomId) {
+//		final EditText v_room = (EditText) findViewById(R.id.room_name);
+//		String room = v_room.getText().toString();
+
+		Intent i = new Intent(PublicChatRoomsActivity.this, LiveRoomActivity.class);
+		i.putExtra(ConstantApp.ACTION_KEY_CROLE, cRole);
+		i.putExtra(ConstantApp.ACTION_KEY_ROOM_NAME, roomId);
+
 		startActivity(i);
 	}
 }

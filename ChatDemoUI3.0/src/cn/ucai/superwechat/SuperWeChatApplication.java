@@ -61,7 +61,7 @@ public class SuperWeChatApplication extends Application {
 
 	public synchronized void initWorkerThread() {
 		if (mWorkerThread == null) {
-			mWorkerThread = new WorkerThread(getApplicationContext());
+			mWorkerThread = new WorkerThread(applicationContext);
 			mWorkerThread.start();
 
 			mWorkerThread.waitForReady();
@@ -69,6 +69,7 @@ public class SuperWeChatApplication extends Application {
 	}
 
 	public synchronized WorkerThread getWorkerThread() {
+		initWorkerThread();
 		return mWorkerThread;
 	}
 

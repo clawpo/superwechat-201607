@@ -29,6 +29,7 @@ import cn.ucai.superwechat.openlive.model.ConstantApp;
 import cn.ucai.superwechat.openlive.model.EngineConfig;
 import cn.ucai.superwechat.openlive.model.MyEngineEventHandler;
 import cn.ucai.superwechat.openlive.model.WorkerThread;
+import cn.ucai.superwechat.utils.L;
 import io.agora.rtc.RtcEngine;
 
 public abstract class BaseActivity extends AppCompatActivity {
@@ -114,7 +115,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     public boolean checkSelfPermission(String permission, int requestCode) {
-        log.debug("checkSelfPermission " + permission + " " + requestCode);
+        L.e("checkSelfPermission " + permission + " " + requestCode);
         if (ContextCompat.checkSelfPermission(this,
                 permission)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -126,7 +127,8 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
 
         if (Manifest.permission.CAMERA.equals(permission)) {
-            ((SuperWeChatApplication) getApplication()).initWorkerThread();
+            L.e("init workerThread....");
+            SuperWeChatApplication.getInstance().initWorkerThread();
         }
         return true;
     }

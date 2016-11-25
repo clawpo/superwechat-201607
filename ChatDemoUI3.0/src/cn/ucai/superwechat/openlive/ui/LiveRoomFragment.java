@@ -238,11 +238,11 @@ public class LiveRoomFragment extends Fragment implements AGEventHandler {
     }
 
     WorkerThread worker() {
-        return ((SuperWeChatApplication) getActivity().getApplication()).getWorkerThread();
+        return SuperWeChatApplication.getInstance().getWorkerThread();
     }
 
     MyEngineEventHandler event() {
-        return ((SuperWeChatApplication) getActivity().getApplication()).getWorkerThread().eventHandler();
+        return SuperWeChatApplication.getInstance().getWorkerThread().eventHandler();
     }
 
     //进行主播、视频画面的配置

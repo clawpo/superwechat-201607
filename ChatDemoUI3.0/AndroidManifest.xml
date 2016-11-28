@@ -492,6 +492,10 @@
             android:screenOrientation="portrait"
             android:theme="@style/FullscreenTheme" />
         <activity
+            android:name=".openlive.ui.LiveRoom2Activity"
+            android:screenOrientation="portrait"
+            android:theme="@style/FullscreenTheme" />
+        <activity
             android:name=".openlive.ui.SettingsActivity"
             android:screenOrientation="portrait"
             android:label="@string/label_settings" />

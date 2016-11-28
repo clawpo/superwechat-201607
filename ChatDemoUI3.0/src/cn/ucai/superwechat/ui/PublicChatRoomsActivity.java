@@ -174,7 +174,7 @@ public class PublicChatRoomsActivity extends BaseActivity {
 //                		putExtra("userId", room.getId()));
 				L.e("live","owner="+room.getOwner()+",current="+EMClient.getInstance().getCurrentUser());
 				onClickJoin(room.getOwner().equals(EMClient.getInstance().getCurrentUser())?
-						Constants.CLIENT_ROLE_BROADCASTER:Constants.CLIENT_ROLE_AUDIENCE,room.getId());
+						Constants.CLIENT_ROLE_BROADCASTER:Constants.CLIENT_ROLE_AUDIENCE,room.getName());
                 
             }
         });

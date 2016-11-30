@@ -3,7 +3,6 @@ package cn.ucai.superwechat.ui;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,8 +35,8 @@ public class LiveListActivity extends BaseActivity {
     RecyclerView mRecycleview;
 
     @Override
-    public void onCreate(Bundle savedInstanceState, PersistableBundle persistentState) {
-        super.onCreate(savedInstanceState, persistentState);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_live_list);
         ButterKnife.bind(this);
         initView();
@@ -97,7 +96,7 @@ public class LiveListActivity extends BaseActivity {
 
         @Override
         public int getItemCount() {
-            return liveRoomList.size();
+            return liveRoomList!=null?liveRoomList.size():0;
         }
     }
 

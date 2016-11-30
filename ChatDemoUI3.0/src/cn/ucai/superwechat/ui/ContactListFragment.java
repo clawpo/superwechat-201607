@@ -196,7 +196,7 @@ public class ContactListFragment extends EaseContactListFragment {
                 break;
             case R.id.chat_room_item:
                 //进入聊天室列表页面
-                startActivity(new Intent(getActivity(), PublicChatRoomsActivity.class));
+                startActivity(new Intent(getActivity(), LiveListActivity.class));
                 break;
 //            case R.id.robot_item:
 //                //进入Robot列表页面

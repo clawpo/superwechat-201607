@@ -25,7 +25,7 @@ android {
 
     defaultConfig {
         applicationId "cn.ucai.superwechat"
-        minSdkVersion 11
+        minSdkVersion 14
         targetSdkVersion 22
         multiDexEnabled true
     }
@@ -83,4 +83,5 @@ dependencies {
     compile 'com.squareup.okhttp3:okhttp-urlconnection:3.4.1'
     compile 'com.google.code.gson:gson:2.7'
     compile project(':ulive-android-sdk')
+    compile 'com.github.florent37:viewanimator:1.0.4'
 }

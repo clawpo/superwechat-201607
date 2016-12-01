@@ -26,6 +26,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.ucai.superwechat.R;
 import cn.ucai.superwechat.domain.LiveRoom;
+import cn.ucai.superwechat.utils.L;
 import cn.ucai.superwechat.utils.MFGT;
 import cn.ucai.superwechat.widget.GridMarginDecoration;
 
@@ -194,8 +195,17 @@ public class LiveListActivity extends BaseActivity {
                 public void onClick(View v) {
                     final int position = holder.getAdapterPosition();
                     if (position == RecyclerView.NO_POSITION) return;
-                    context.startActivity(new Intent(context, LiveDetailsActivity.class)
-                            .putExtra("liveroom", liveRoomList.get(position)));
+                    LiveRoom r =  liveRoomList.get(position);
+                    L.e("livelist","u="+EMClient.getInstance().getCurrentUser());
+                    L.e("livelist","r="+r);
+                    if(r.getAnchorId().equals(EMClient.getInstance().getCurrentUser())){
+                        context.startActivity(new Intent(context, StartLiveActivity.class)
+                                .putExtra("liveroom", liveRoomList.get(position))
+                        .putExtra("userId",r.getChatroomId()));
+                    }else {
+                        context.startActivity(new Intent(context, LiveDetailsActivity.class)
+                                .putExtra("liveroom", liveRoomList.get(position)));
+                    }
                 }
             });
             return holder;

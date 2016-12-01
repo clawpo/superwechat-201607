@@ -9,9 +9,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.hyphenate.EMChatRoomChangeListener;
+import com.hyphenate.chat.EMChatRoom;
+import com.hyphenate.chat.EMClient;
+import com.hyphenate.chat.EMCursorResult;
+import com.hyphenate.exceptions.HyphenateException;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -27,19 +34,67 @@ import cn.ucai.superwechat.widget.GridMarginDecoration;
  */
 
 public class LiveListActivity extends BaseActivity {
+    @BindView(R.id.recycleview)
+    RecyclerView mRecycleview;
     @BindView(R.id.img_back)
     ImageView mImgBack;
     @BindView(R.id.txt_title)
     TextView mTxtTitle;
-    @BindView(R.id.recycleview)
-    RecyclerView mRecycleview;
+
+    private boolean isLoading;
+    private boolean isFirstLoading = true;
+    private boolean hasMoreData = true;
+    private String cursor;
+    private final int pagesize = 10;
+    private List<EMChatRoom> rooms;
+    PhotoAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_live_list);
         ButterKnife.bind(this);
+        rooms = new ArrayList<EMChatRoom>();
+        loadAndShowData();
         initView();
+        setListener();
+    }
+
+    private void setListener() {
+        EMClient.getInstance().chatroomManager().addChatRoomChangeListener(new EMChatRoomChangeListener() {
+            @Override
+            public void onChatRoomDestroyed(String roomId, String roomName) {
+                if (adapter != null) {
+                    runOnUiThread(new Runnable() {
+
+                        @Override
+                        public void run() {
+                            if (adapter != null) {
+                                adapter.notifyDataSetChanged();
+                                loadAndShowData();
+                            }
+                        }
+
+                    });
+                }
+            }
+
+            @Override
+            public void onMemberJoined(String roomId, String participant) {
+            }
+
+            @Override
+            public void onMemberExited(String roomId, String roomName,
+                                       String participant) {
+
+            }
+
+            @Override
+            public void onMemberKicked(String roomId, String roomName,
+                                       String participant) {
+            }
+
+        });
     }
 
     private void initView() {
@@ -48,11 +103,73 @@ public class LiveListActivity extends BaseActivity {
         mTxtTitle.setText(getString(R.string.chat_room));
         mRecycleview.setHasFixedSize(true);
         mRecycleview.addItemDecoration(new GridMarginDecoration(6));
-        mRecycleview.setAdapter(new PhotoAdapter(this, null));
-
+        mRecycleview.setAdapter(adapter);
     }
 
-    @OnClick(R.id.img_back)
+    private void loadAndShowData() {
+        new Thread(new Runnable() {
+
+            public void run() {
+                try {
+                    isLoading = true;
+                    final EMCursorResult<EMChatRoom> result = EMClient.getInstance().chatroomManager().fetchPublicChatRoomsFromServer(pagesize, cursor);
+                    //get chat room list
+                    final List<EMChatRoom> chatRooms = result.getData();
+                    runOnUiThread(new Runnable() {
+
+                        public void run() {
+                            if (chatRooms.size() != 0) {
+                                cursor = result.getCursor();
+                            }
+                            if (isFirstLoading) {
+                                isFirstLoading = false;
+//                                adapter = new PublicChatRoomsActivity.ChatRoomAdapter(PublicChatRoomsActivity.this, 1, chatRoomList);
+                                adapter = new PhotoAdapter(LiveListActivity.this, getLiveRoomList(chatRooms));
+                                mRecycleview.setAdapter(adapter);
+                                rooms.addAll(chatRooms);
+                            } else {
+                                if (chatRooms.size() < pagesize) {
+                                    hasMoreData = false;
+                                }
+                                adapter.notifyDataSetChanged();
+                            }
+                            isLoading = false;
+                        }
+                    });
+                } catch (HyphenateException e) {
+                    e.printStackTrace();
+                    runOnUiThread(new Runnable() {
+                        public void run() {
+                            isLoading = false;
+                            Toast.makeText(LiveListActivity.this, getResources().getString(R.string.failed_to_load_data), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+            }
+        }).start();
+    }
+
+    private List<LiveRoom> getLiveRoomList(List<EMChatRoom> chatRooms) {
+        if (chatRooms != null && chatRooms.size() > 0) {
+
+            List<LiveRoom> roomList = new ArrayList<>();
+            for (EMChatRoom room : chatRooms) {
+                LiveRoom liveRoom = new LiveRoom();
+                liveRoom.setName(room.getName());
+                liveRoom.setAudienceNum(room.getAffiliationsCount());
+                liveRoom.setId(room.getId());
+                liveRoom.setChatroomId(room.getId());
+                liveRoom.setCover(R.drawable.default_hd_avatar);
+                liveRoom.setAnchorId(room.getOwner());
+                roomList.add(liveRoom);
+            }
+
+            return roomList;
+        }
+        return null;
+    }
+
+    @OnClick(R.id.txt_title)
     public void onBackClick() {
         MFGT.finish(this);
     }
@@ -62,10 +179,11 @@ public class LiveListActivity extends BaseActivity {
         private final List<LiveRoom> liveRoomList;
         private final Context context;
 
-        public PhotoAdapter(Context context, List<LiveRoom> liveRoomList){
+        public PhotoAdapter(Context context, List<LiveRoom> liveRoomList) {
             this.liveRoomList = liveRoomList;
             this.context = context;
         }
+
         @Override
         public PhotoViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             final PhotoViewHolder holder = new PhotoViewHolder(LayoutInflater.from(context).
@@ -96,7 +214,7 @@ public class LiveListActivity extends BaseActivity {
 
         @Override
         public int getItemCount() {
-            return liveRoomList!=null?liveRoomList.size():0;
+            return liveRoomList != null ? liveRoomList.size() : 0;
         }
     }
 
@@ -105,7 +223,8 @@ public class LiveListActivity extends BaseActivity {
         ImageView imageView;
         @BindView(R.id.author)
         TextView anchor;
-        @BindView(R.id.audience_num) TextView audienceNum;
+        @BindView(R.id.audience_num)
+        TextView audienceNum;
 
         public PhotoViewHolder(View itemView) {
             super(itemView);

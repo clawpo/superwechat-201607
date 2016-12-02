@@ -24,6 +24,7 @@ import com.hyphenate.chat.EMCmdMessageBody;
 import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMTextMessageBody;
+import com.hyphenate.easeui.utils.EaseUserUtils;
 import com.hyphenate.exceptions.HyphenateException;
 import com.hyphenate.util.EMLog;
 
@@ -498,6 +499,8 @@ public abstract class LiveBaseActivity extends BaseActivity {
           showUserDetailsDialog(namelist.get(position));
         }
       });
+
+      EaseUserUtils.setAppUserAvatar(context,namelist.get(position),holder.Avatar);
       //暂时使用测试数据
 //      Glide.with(context)
 //          .load(avatarRepository.getAvatar())

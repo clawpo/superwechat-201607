@@ -18,11 +18,11 @@
         android:gravity="center_horizontal"
         android:background="@android:color/transparent"
         >
-        <com.hyphenate.easeui.widget.EaseImageView
+        <ImageView
+            android:id="@+id/iv_useravatar"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:src="@drawable/ease_default_avatar"
-            />
+            android:src="@drawable/ease_default_avatar"/>
         <TextView
             android:id="@+id/tv_username"
             android:layout_width="wrap_content"

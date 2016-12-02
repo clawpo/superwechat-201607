@@ -13,12 +13,12 @@
         android:orientation="vertical"
         android:gravity="center_horizontal"
         >
-        <com.hyphenate.easeui.widget.EaseImageView
+        <ImageView
+            android:id="@id/iv_useravatar"
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:src="@drawable/ease_default_avatar"
-            android:layout_marginTop="100dp"
-            />
+            android:layout_marginTop="100dp"/>
         <TextView
             android:id="@+id/tv_username"
             android:layout_width="wrap_content"
@@ -36,6 +36,7 @@
             android:text="直播时间"
             />
         <TextView
+            android:id="@+id/tv_show_time"
             style="@style/LiveEndTextStyle"
             android:text="32:21"
             android:layout_marginTop="5dp"

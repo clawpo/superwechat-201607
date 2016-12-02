@@ -29,6 +29,8 @@ import com.ucloud.live.UEasyStreaming;
 import com.ucloud.live.UStreamingProfile;
 import com.ucloud.live.widget.UAspectFrameLayout;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Random;
 
 import butterknife.BindView;
@@ -79,6 +81,7 @@ public class StartLiveActivity extends LiveBaseActivity
     private LiveSettings mSettings;
     private UStreamingProfile mStreamingProfile;
     UEasyStreaming.UEncodingType encodingType;
+    long timeMillis;
 
     LiveRoom liveRoom;
 
@@ -156,6 +159,8 @@ public class StartLiveActivity extends LiveBaseActivity
                 Toast.makeText(this, event.toString(), Toast.LENGTH_LONG).show();
                 break;
             case UEasyStreaming.State.START_RECORDING:
+                timeMillis = System.currentTimeMillis();
+                L.e(TAG,"start recording...."+timeMillis);
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
@@ -240,12 +245,18 @@ public class StartLiveActivity extends LiveBaseActivity
      */
     @OnClick(R.id.img_bt_close)
     void closeLive() {
+        long currentTimeMillis = System.currentTimeMillis();
+        long time = currentTimeMillis - timeMillis - 8*60*60*1000;
+        SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
+        String t = format.format(new Date(time));
+        L.e(TAG,"close recording...."+currentTimeMillis);
+        L.e(TAG," recording...."+t);
         mEasyStreaming.stopRecording();
         if (!isStarted) {
             finish();
             return;
         }
-        showConfirmCloseLayout();
+        showConfirmCloseLayout(t);
     }
 
     @OnClick(R.id.img_bt_switch_voice)
@@ -260,7 +271,7 @@ public class StartLiveActivity extends LiveBaseActivity
         }
     }
 
-    private void showConfirmCloseLayout() {
+    private void showConfirmCloseLayout(String time) {
         //显示封面
         coverImage.setVisibility(View.VISIBLE);
 //    List<LiveRoom> liveRoomList = TestDataRepository.getLiveRoomList();
@@ -272,8 +283,13 @@ public class StartLiveActivity extends LiveBaseActivity
         coverImage.setImageResource(R.drawable.default_hd_avatar);
         View view = liveEndLayout.inflate();
         Button closeConfirmBtn = (Button) view.findViewById(R.id.live_close_confirm);
+        ImageView useravatarView = (ImageView) view.findViewById(R.id.iv_useravatar);
         TextView usernameView = (TextView) view.findViewById(R.id.tv_username);
-        usernameView.setText(EMClient.getInstance().getCurrentUser());
+        TextView showtimeView = (TextView) view.findViewById(R.id.tv_show_time);
+        EaseUserUtils.setCurentAppUserNick(usernameView);
+        EaseUserUtils.setCurentAppUserAvatar(this,useravatarView);
+        showtimeView.setText(time);
+//        usernameView.setText(EMClient.getInstance().getCurrentUser());
         closeConfirmBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

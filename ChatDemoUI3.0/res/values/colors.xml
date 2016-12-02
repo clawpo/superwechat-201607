@@ -46,4 +46,6 @@
   <color name="common_btn_black_pressed">#111010</color>
   <color name="common_btn_blue_normal">#24AAFF</color>
   <color name="common_btn_blue_pressed">#1887cd</color>
+    <color name="item_gift_text">#313131</color>
+    <color name="item_gift_price">#df3131</color>
 </resources>

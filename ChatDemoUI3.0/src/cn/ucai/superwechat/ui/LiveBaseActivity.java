@@ -485,6 +485,19 @@ public abstract class LiveBaseActivity extends BaseActivity {
 //        .replace(R.id.message_container, fragment)
 //        .commit();
 //  }
+  @OnClick(R.id.chat_image) void onChatImageClick() {
+    final RoomGiftListDialog dialog =
+            RoomGiftListDialog.newInstance("");
+    dialog.setUserDetailsDialogListener(
+            new RoomGiftListDialog.UserDetailsDialogListener() {
+              @Override public void onMentionClick(String username) {
+                dialog.dismiss();
+                messageView.getInputView().setText("@" + username + " ");
+                showInputView();
+              }
+            });
+    dialog.show(getSupportFragmentManager(), "RoomGiftListDialog");
+  }
 
   @OnClick(R.id.screenshot_image) void onScreenshotImageClick(){
     Bitmap bitmap = screenshot();

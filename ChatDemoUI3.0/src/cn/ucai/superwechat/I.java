@@ -61,6 +61,18 @@ public interface I {
 		String UPDATE_TIME 							= 		"m_location_last_update_time";	//最后更新时间
 	}
 
+	public static interface Live {
+		String uname = "uname";
+		String pageId = "pageId";
+		String pageSize = "pageSize";
+		String anchor = "anchor";
+		String giftId = "giftId";
+		String giftNum = "giftNum";
+		String count = "count";
+		String rmb = "rmb";
+		String rdate = "rdate";
+	}
+
 //	String AVATAR_PATH 								= 		"E:/test/";
 	String ISON8859_1 								= 		"iso8859-1";
 	String UTF_8 									= 		"utf-8";
@@ -208,4 +220,16 @@ public interface I {
 	String REQUEST_UPDATE_LOCATION 					= 		"updateLocation";
 	/** 客户端发送的分页下载附近的人的请求 */
 	String REQUEST_DOWNLOAD_LOCATION 				= 		"downloadLocation";
+	/** 客户端发送的全部礼物信息并展示，包括礼物的名称、图片地址和价格的请求 */
+	String REQUEST_ALL_GIFTS		 				= 		"live/getAllGifts";
+	/** 客户端发送的分页加载充值流水的请求 */
+	String REQUEST_RECHARGE_STATEMENTS_PAGE 		= 		"live/getRechargeStatements";
+	/** 客户端发送的根据用户名获取账户余额的请求 */
+	String REQUEST_BALANCE			 				= 		"live/getBalance";
+	/** 客户端发送的统计主播收到礼物的次数、数量及礼物信息等的请求 */
+	String REQUEST_ANCHOR_GIFT		 				= 		"live/getGiftStatementsByAnchor";
+	/** 客户端发送的用户给主播赠送礼物的请求 */
+	String REQUEST_GIVING_GIFT		 				= 		"live/givingGifts";
+	/** 客户端发送的用户充值的请求 */
+	String REQUEST_RECHARGE			 				= 		"live/recharge";
 }

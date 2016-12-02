@@ -30,12 +30,11 @@
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
             >
-            <com.hyphenate.easeui.widget.EaseImageView
+            <ImageView
+                android:id="@+id/iv_useravatar"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                app:ease_shape_type="round"
-                android:src="@drawable/ease_default_avatar"
-                />
+                android:src="@drawable/ease_default_avatar"/>
 
             <TextView
                 android:id="@+id/tv_username"
@@ -44,8 +43,7 @@
                 android:textSize="15sp"
                 android:layout_marginLeft="10dp"
                 android:text="usernmae"
-                android:textColor="@color/common_white"
-                />
+                android:textColor="@color/common_white"/>
 
         </LinearLayout>
 

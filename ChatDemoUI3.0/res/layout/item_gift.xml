@@ -9,31 +9,33 @@
               android:weightSum="1">
     <ImageView
         android:id="@+id/ivGiftThumb"
-        android:layout_width="match_parent"
-        android:layout_height="250dp"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:scaleType="fitXY"
         android:layout_gravity="center"
         android:src="@drawable/delete_expression"
         android:layout_weight="0.42"/>
     <TextView
         android:id="@+id/tvGiftName"
-        android:layout_width="150dp"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:textColor="@color/item_gift_text"
         android:textSize="13sp"
         android:maxLines="2"
         android:ellipsize="end"
+        android:gravity="center"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="3dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:text="商品名称商品名称商品名称商品名称商品名称商品名称商品名称商品名称商品名称商品名称"/>
+        android:text="商品名称"/>
     <TextView
         android:id="@+id/tvGiftPrice"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/item_gift_price"
         android:textSize="13sp"
+        android:gravity="center"
         android:layout_marginTop="3dp"
         android:layout_marginBottom="10dp"
         android:layout_marginLeft="20dp"

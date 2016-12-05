@@ -1,6 +1,7 @@
 package cn.ucai.superwechat.ui;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.MenuItem;
@@ -30,6 +31,9 @@ import cn.ucai.superwechat.utils.L;
 import static com.easemob.redpacketui.recyclerview.widget.StaggeredGridLayoutManager.TAG;
 
 public class ConversationListFragment extends EaseConversationListFragment{
+
+    private static final String ARG_ANCHOOR = "anchorId";
+    private static final String ARG_IS_NORMAL = "isNormalStyle";
 
     private TextView errorText;
 
@@ -146,6 +150,20 @@ public class ConversationListFragment extends EaseConversationListFragment{
         // update unread count
         ((MainActivity) getActivity()).updateUnreadLabel();
         return true;
+    }
+    /**
+     * create a ConversationListFragment instance
+     * @param anchorId anchori id
+     * @param isNormalStyle whether the fragemnt is normal style
+     * @return
+     */
+    public static ConversationListFragment newInstance(String anchorId, boolean isNormalStyle){
+        ConversationListFragment fragment = new ConversationListFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString(ARG_ANCHOOR,anchorId);
+        bundle.putBoolean(ARG_IS_NORMAL,isNormalStyle);
+        fragment.setArguments(bundle);
+        return fragment;
     }
 
 }

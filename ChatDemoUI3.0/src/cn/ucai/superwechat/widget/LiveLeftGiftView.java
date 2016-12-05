@@ -14,6 +14,7 @@ import com.hyphenate.easeui.widget.EaseImageView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.ucai.superwechat.R;
+import cn.ucai.superwechat.utils.Utils;
 
 /**
  * Created by wei on 2016/6/7.
@@ -58,5 +59,9 @@ public class LiveLeftGiftView extends RelativeLayout {
 
     public ImageView getGiftImageView(){
         return giftImage;
+    }
+
+    public void setGiftImage(int imageId){
+        giftImage.setImageResource(Utils.getGiftImage(imageId));
     }
 }

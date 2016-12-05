@@ -137,6 +137,13 @@ public class RoomGiftListDialog extends DialogFragment {
         void onMentionClick(String username);
     }
 
+    private View.OnClickListener mListener;
+
+    public void setGiftOnClickListener(View.OnClickListener listener){
+        mListener = listener;
+    }
+
+
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -175,11 +182,6 @@ public class RoomGiftListDialog extends DialogFragment {
             mList.addAll(list);
         }
 
-        public void setMore(boolean more) {
-            isMore = more;
-            notifyDataSetChanged();
-        }
-
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             ViewHolder holder = null;
@@ -194,6 +196,7 @@ public class RoomGiftListDialog extends DialogFragment {
             gh.mTvGiftName.setText(gift.getGname());
             gh.mTvGiftPrice.setText(String.valueOf(gift.getGprice()));
             EaseUserUtils.setAppUserPathAvatar(getActivity(),gift.getGurl(),gh.mIvGiftThumb);
+            gh.mLayoutGoods.setTag(gift.getId());
         }
 
         @Override
@@ -227,6 +230,7 @@ public class RoomGiftListDialog extends DialogFragment {
             GiftViewHolder(View view) {
                 super(view);
                 ButterKnife.bind(this, view);
+                mLayoutGoods.setOnClickListener(mListener);
             }
         }
     }

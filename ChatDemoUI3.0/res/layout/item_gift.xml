@@ -13,7 +13,6 @@
         android:layout_height="100dp"
         android:scaleType="fitXY"
         android:layout_gravity="center"
-        android:src="@drawable/delete_expression"
         android:layout_weight="0.42"/>
     <TextView
         android:id="@+id/tvGiftName"

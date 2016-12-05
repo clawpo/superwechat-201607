@@ -103,18 +103,19 @@ public abstract class LiveBaseActivity extends BaseActivity {
 
   protected abstract void onActivityCreate(@Nullable Bundle savedInstanceState);
 
-  protected synchronized void showLeftGiftVeiw(String name,String avatar) {
-    L.e(TAG,"showLeftGiftVeiw,name="+name+",avatar="+avatar);
+  protected synchronized void showLeftGiftVeiw(String name,String avatar,int giftId) {
+    L.e(TAG,"showLeftGiftVeiw,name="+name+",avatar="+avatar+",giftId="+giftId);
     if (!isGift2Showing) {
-      showGift2Derect(name,avatar);
+      showGift2Derect(name,avatar,giftId);
     } else if (!isGiftShowing) {
-      showGift1Derect(name,avatar);
+      showGift1Derect(name,avatar,giftId);
     } else {
       toShowList.add(avatar);
     }
   }
 
-  private void showGift1Derect(final String name,final String avatar) {
+  private void showGift1Derect(final String name,final String avatar,final int giftId) {
+    L.e(TAG,"showGift1Derect...");
     isGiftShowing = true;
     runOnUiThread(new Runnable() {
       @Override public void run() {
@@ -122,6 +123,7 @@ public abstract class LiveBaseActivity extends BaseActivity {
         leftGiftView.setName(name);
         leftGiftView.setAvatar(avatar);
         leftGiftView.setTranslationY(0);
+        leftGiftView.setGiftImage(giftId);
         ViewAnimator.animate(leftGiftView)
             .alpha(0, 1)
             .translationX(-leftGiftView.getWidth(), 0)
@@ -139,7 +141,7 @@ public abstract class LiveBaseActivity extends BaseActivity {
 
                 }
                 if (pollName != null) {
-                  showGift1Derect(pollName,avatar);
+                  showGift1Derect(pollName,avatar,giftId);
                 } else {
                   isGiftShowing = false;
                 }
@@ -155,7 +157,8 @@ public abstract class LiveBaseActivity extends BaseActivity {
     });
   }
 
-  private void showGift2Derect(final String name,final String avatar) {
+  private void showGift2Derect(final String name,final String avatar,final int giftId) {
+    L.e(TAG,"showGift2Derect...");
     isGift2Showing = true;
     runOnUiThread(new Runnable() {
       @Override public void run() {
@@ -163,6 +166,7 @@ public abstract class LiveBaseActivity extends BaseActivity {
         leftGiftView2.setName(name);
         leftGiftView2.setAvatar(avatar);
         leftGiftView2.setTranslationY(0);
+        leftGiftView2.setGiftImage(giftId);
         ViewAnimator.animate(leftGiftView2)
             .alpha(0, 1)
             .translationX(-leftGiftView2.getWidth(), 0)
@@ -180,7 +184,7 @@ public abstract class LiveBaseActivity extends BaseActivity {
 
                 }
                 if (pollName != null) {
-                  showGift2Derect(pollName,avatar);
+                  showGift2Derect(pollName,avatar,giftId);
                 } else {
                   isGift2Showing = false;
                 }
@@ -279,6 +283,7 @@ public abstract class LiveBaseActivity extends BaseActivity {
     @Override public void onCmdMessageReceived(List<EMMessage> messages) {
       final EMMessage message = messages.get(messages.size() - 1);
       if (Constant.CMD_GIFT.equals(((EMCmdMessageBody) message.getBody()).action())) {
+      final int giftId = message.getIntAttribute(Constant.CMD_GIFT_TYPE,0);
         NetDao.searchUser(LiveBaseActivity.this, message.getFrom(), new OkHttpUtils.OnCompleteListener<String>() {
           @Override
           public void onSuccess(String s) {
@@ -287,9 +292,9 @@ public abstract class LiveBaseActivity extends BaseActivity {
               if(result!=null && result.isRetMsg()){
                 User u = (User) result.getRetData();
                 if(u!=null && u.getMUserNick()!=null) {
-                  showLeftGiftVeiw(u.getMUserNick(),message.getFrom());
+                  showLeftGiftVeiw(u.getMUserNick(),message.getFrom(),giftId);
                 }else{
-                  showLeftGiftVeiw(message.getFrom(),message.getFrom());
+                  showLeftGiftVeiw(message.getFrom(),message.getFrom(),giftId);
                 }
               }
             }
@@ -297,7 +302,7 @@ public abstract class LiveBaseActivity extends BaseActivity {
 
           @Override
           public void onError(String error) {
-            showLeftGiftVeiw(message.getFrom(),message.getFrom());
+            showLeftGiftVeiw(message.getFrom(),message.getFrom(),giftId);
           }
         });
       }
@@ -467,35 +472,49 @@ public abstract class LiveBaseActivity extends BaseActivity {
     showInputView();
   }
 
-  @OnClick(R.id.present_image) void onPresentImageClick() {
-    EMMessage message = EMMessage.createSendMessage(EMMessage.Type.CMD);
-    message.setReceipt(chatroomId);
-    EMCmdMessageBody cmdMessageBody = new EMCmdMessageBody(Constant.CMD_GIFT);
-    message.addBody(cmdMessageBody);
-    message.setChatType(EMMessage.ChatType.ChatRoom);
-    EMClient.getInstance().chatManager().sendMessage(message);
-    showLeftGiftVeiw(SuperWeChatHelper.getInstance().getAppContactList()
-            .get(EMClient.getInstance().getCurrentUser()).getMUserNick(),
-            EMClient.getInstance().getCurrentUser());
+//  @OnClick(R.id.present_image) void onPresentImageClick() {
+//    EMMessage message = EMMessage.createSendMessage(EMMessage.Type.CMD);
+//    message.setReceipt(chatroomId);
+//    EMCmdMessageBody cmdMessageBody = new EMCmdMessageBody(Constant.CMD_GIFT);
+//    message.addBody(cmdMessageBody);
+//    message.setChatType(EMMessage.ChatType.ChatRoom);
+//    EMClient.getInstance().chatManager().sendMessage(message);
+//    showLeftGiftVeiw(SuperWeChatHelper.getInstance().getAppContactList()
+//            .get(EMClient.getInstance().getCurrentUser()).getMUserNick(),
+//            EMClient.getInstance().getCurrentUser());
+//  }
+
+  @OnClick(R.id.chat_image) void onChatImageClick() {
+    ConversationListFragment fragment = ConversationListFragment.newInstance(anchorId, false);
+    getSupportFragmentManager().beginTransaction()
+        .replace(R.id.message_container, fragment)
+        .commit();
   }
 
-//  @OnClick(R.id.chat_image) void onChatImageClick() {
-//    ConversationListFragment fragment = ConversationListFragment.newInstance(anchorId, false);
-//    getSupportFragmentManager().beginTransaction()
-//        .replace(R.id.message_container, fragment)
-//        .commit();
-//  }
-  @OnClick(R.id.chat_image) void onChatImageClick() {
+  @OnClick(R.id.present_image) void onPresentImageClick() {
     final RoomGiftListDialog dialog =
             RoomGiftListDialog.newInstance("");
-    dialog.setUserDetailsDialogListener(
-            new RoomGiftListDialog.UserDetailsDialogListener() {
-              @Override public void onMentionClick(String username) {
+    dialog.setGiftOnClickListener(
+            new View.OnClickListener() {
+              @Override
+              public void onClick(View v) {
                 dialog.dismiss();
-                messageView.getInputView().setText("@" + username + " ");
-                showInputView();
+                int giftId = (int) v.getTag();
+                L.e(TAG,"giftId="+giftId);
+                EMMessage message = EMMessage.createSendMessage(EMMessage.Type.CMD);
+                message.setReceipt(chatroomId);
+                EMCmdMessageBody cmdMessageBody = new EMCmdMessageBody(Constant.CMD_GIFT);
+                message.addBody(cmdMessageBody);
+                message.setAttribute(Constant.CMD_GIFT_TYPE,giftId);
+                message.setChatType(EMMessage.ChatType.ChatRoom);
+                EMClient.getInstance().chatManager().sendMessage(message);
+                showLeftGiftVeiw(SuperWeChatHelper.getInstance().getAppContactList()
+                                .get(EMClient.getInstance().getCurrentUser()).getMUserNick(),
+                        EMClient.getInstance().getCurrentUser(),giftId);
+
               }
-            });
+            }
+    );
     dialog.show(getSupportFragmentManager(), "RoomGiftListDialog");
   }
 

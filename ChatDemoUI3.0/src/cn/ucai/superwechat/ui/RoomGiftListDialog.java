@@ -24,18 +24,18 @@ import android.widget.TextView;
 import com.hyphenate.easeui.utils.EaseUserUtils;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import cn.ucai.superwechat.R;
-import cn.ucai.superwechat.bean.Result;
-import cn.ucai.superwechat.data.NetDao;
-import cn.ucai.superwechat.data.OkHttpUtils;
+import cn.ucai.superwechat.SuperWeChatHelper;
 import cn.ucai.superwechat.domain.Gift;
-import cn.ucai.superwechat.utils.L;
-import cn.ucai.superwechat.utils.ResultUtils;
 
 /**
  * Created by clawpo on 2016/12/2.
@@ -55,6 +55,7 @@ public class RoomGiftListDialog extends DialogFragment {
     List<Gift> mGiftList;
     GiftAdapter mAdapter;
     GridLayoutManager glm;
+    private Map<Integer, Gift> giftMap;
 
     public static RoomGiftListDialog newInstance(String username) {
         RoomGiftListDialog dialog = new RoomGiftListDialog();
@@ -80,34 +81,34 @@ public class RoomGiftListDialog extends DialogFragment {
         mRvGift.setLayoutManager(glm);
         mRvGift.setHasFixedSize(true);
         mGiftList = new ArrayList<>();
+        getGiftList();
         mAdapter = new GiftAdapter(getActivity(),mGiftList);
         mRvGift.setAdapter(mAdapter);
-        NetDao.getAllGift(getContext(), new OkHttpUtils.OnCompleteListener<String>() {
-            @Override
-            public void onSuccess(String s) {
-                if(s!=null){
-                    Result result = ResultUtils.getListResultFromJson(s, Gift.class);
-                    if(result!=null){
-                        if(result.isRetMsg()){
-                            List<Gift> list = (List<Gift>) result.getRetData();
-                            L.e(TAG,"list="+list);
-                            mAdapter.initData(list);
-                        }
-                    }
-                }
+    }
+    /**
+     * get contact list and sort, will filter out users in blacklist
+     */
+    protected void getGiftList() {
+        mGiftList.clear();
+        if(giftMap ==null){
+            giftMap = SuperWeChatHelper.getInstance().getGiftList();
+        }
+        synchronized (this.giftMap) {
+            Iterator<Map.Entry<Integer, Gift>> iterator = giftMap.entrySet().iterator();
+            while (iterator.hasNext()) {
+                Map.Entry<Integer, Gift> entry = iterator.next();
+                    Gift gift = entry.getValue();
+                    mGiftList.add(gift);
             }
+        }
 
+        Collections.sort(mGiftList, new Comparator<Gift>() {
             @Override
-            public void onError(String error) {
-
+            public int compare(Gift lhs, Gift rhs) {
+                return lhs.getId().compareTo(rhs.getId());
             }
         });
-//        if (username != null) {
-//            usernameView.setText(username);
-//            EaseUserUtils.setAppUserNick(username, usernameView);
-//        }
-//        mentionBtn.setText("@TA");
-//        EaseUserUtils.setAppUserAvatar(getActivity(), username, mIvUseravatar);
+
     }
 
 //    @OnClick(R.id.btn_message) void onMessageBtnClick(){

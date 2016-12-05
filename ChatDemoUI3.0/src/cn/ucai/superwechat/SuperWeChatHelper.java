@@ -55,6 +55,7 @@ import cn.ucai.superwechat.db.InviteMessgeDao;
 import cn.ucai.superwechat.db.SuperWeChatDBManager;
 import cn.ucai.superwechat.db.UserDao;
 import cn.ucai.superwechat.domain.EmojiconExampleGroupData;
+import cn.ucai.superwechat.domain.Gift;
 import cn.ucai.superwechat.domain.InviteMessage;
 import cn.ucai.superwechat.domain.InviteMessage.InviteMesageStatus;
 import cn.ucai.superwechat.domain.RobotUser;
@@ -100,6 +101,8 @@ public class SuperWeChatHelper {
 	private SuperWeChatModel demoModel = null;
 
     private Map<String, User> appContactList;
+
+    private Map<Integer, Gift> giftList;
 	
 	/**
      * sync groups status listener
@@ -1153,6 +1156,38 @@ public class SuperWeChatHelper {
 
            }
        });
+       NetDao.getAllGift(appContext, new OkHttpUtils.OnCompleteListener<String>() {
+           @Override
+           public void onSuccess(String s) {
+               if(s!=null){
+                   Result result = ResultUtils.getListResultFromJson(s, Gift.class);
+                   if(result!=null){
+                       if(result.isRetMsg()){
+                           List<Gift> list = (List<Gift>) result.getRetData();
+                           if(list!=null && list.size()>0){
+                               L.e(TAG,"gift list="+list.size());
+                               Map<Integer, Gift> giftlist = new HashMap<>();
+                               for (Gift gift : list) {
+                                   giftlist.put(gift.getId(), gift);
+                               }
+                               // save the contact list to cache
+                               getGiftList().clear();
+                               getGiftList().putAll(giftlist);
+                               // save the contact list to database
+                               UserDao dao = new UserDao(appContext);
+                               List<Gift> gifts = new ArrayList<Gift>(giftlist.values());
+                               dao.saveGiftList(gifts);
+                           }
+                       }
+                   }
+               }
+           }
+
+           @Override
+           public void onError(String error) {
+
+           }
+       });
        
        new Thread(){
            @Override
@@ -1397,5 +1432,37 @@ public class SuperWeChatHelper {
     public void delAppContact(String username){
         getAppContactList().remove(username);
         demoModel.delAppContact(username);
+    }
+
+    /**
+     * update gift list to cache and database
+     *
+     * @param giftInfoList
+     */
+    public void updateGiftList(List<Gift> giftInfoList) {
+        for (Gift gift : giftInfoList) {
+            giftList.put(gift.getId(), gift);
+        }
+        ArrayList<Gift> mList = new ArrayList<Gift>();
+        mList.addAll(giftList.values());
+        demoModel.saveGiftList(mList);
+    }
+
+    /**
+     * get gift list
+     *
+     * @return
+     */
+    public Map<Integer, Gift> getGiftList() {
+        if (isLoggedIn() && giftList == null) {
+            giftList = demoModel.getGiftList();
+        }
+
+        // return a empty non-null object to avoid app crash
+        if(giftList == null){
+            giftList = new Hashtable<Integer, Gift>();
+        }
+
+        return giftList;
     }
 }

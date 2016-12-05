@@ -21,6 +21,7 @@ import com.hyphenate.easeui.domain.User;
 import java.util.List;
 import java.util.Map;
 
+import cn.ucai.superwechat.domain.Gift;
 import cn.ucai.superwechat.domain.RobotUser;
 
 public class UserDao {
@@ -46,6 +47,12 @@ public class UserDao {
 	public static final String USER_COLUMN_AVATAR_SUFFIX = "m_user_avatar_suffix";
 	public static final String USER_COLUMN_AVATAR_TYPE = "m_user_avatar_type";
 	public static final String USER_COLUMN_AVATAR_LASTUPDATE_TIME = "m_user_avatar_lastupdate_time";
+
+	public static final String GIFT_TABLE_NAME = "t_superwechat_gift";
+	public static final String GIFT_COLUMN_ID = "m_gift_id";
+	public static final String GIFT_COLUMN_NAME = "m_gift_name";
+	public static final String GIFT_COLUMN_URL = "m_gift_url";
+	public static final String GIFT_COLUMN_PRICE = "m_gift_price";
 	
 	
 	public UserDao(Context context) {
@@ -129,5 +136,24 @@ public class UserDao {
 	 */
 	public void deleteAppContact(String username){
 		SuperWeChatDBManager.getInstance().deleteAppContact(username);
+	}
+
+	/**
+	 * save Gift list
+	 *
+	 * @param giftList
+	 */
+	public void saveGiftList(List<Gift> giftList) {
+		SuperWeChatDBManager.getInstance().saveGiftList(giftList);
+	}
+
+	/**
+	 * get Gift list
+	 *
+	 * @return
+	 */
+	public Map<Integer, Gift> getGiftList() {
+
+		return SuperWeChatDBManager.getInstance().getGiftList();
 	}
 }

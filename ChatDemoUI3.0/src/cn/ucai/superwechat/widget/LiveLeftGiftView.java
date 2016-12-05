@@ -14,6 +14,9 @@ import com.hyphenate.easeui.widget.EaseImageView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.ucai.superwechat.R;
+import cn.ucai.superwechat.SuperWeChatHelper;
+import cn.ucai.superwechat.domain.Gift;
+import cn.ucai.superwechat.utils.L;
 import cn.ucai.superwechat.utils.Utils;
 
 /**
@@ -27,6 +30,8 @@ public class LiveLeftGiftView extends RelativeLayout {
     TextView name;
     @BindView(R.id.gift_image)
     ImageView giftImage;
+    @BindView(R.id.gift_name)
+    TextView mGiftName;
 
     public LiveLeftGiftView(Context context) {
         super(context);
@@ -48,20 +53,30 @@ public class LiveLeftGiftView extends RelativeLayout {
         ButterKnife.bind(this);
     }
 
-    public void setName(String name){
+    public void setName(String name) {
         this.name.setText(name);
     }
 
-    public void setAvatar(String avatar){
+    public void setAvatar(String avatar) {
 //        Glide.with(getContext()).load(avatar).into(this.avatar);
-        EaseUserUtils.setAppUserAvatar(getContext(),avatar,this.avatar);
+        EaseUserUtils.setAppUserAvatar(getContext(), avatar, this.avatar);
     }
 
-    public ImageView getGiftImageView(){
+    public ImageView getGiftImageView() {
         return giftImage;
     }
 
-    public void setGiftImage(int imageId){
+    public void setGiftImage(int imageId) {
         giftImage.setImageResource(Utils.getGiftImage(imageId));
+    }
+
+    public void setGift(int giftId){
+        if(giftId==0){
+            L.e("LiveLeftGiftView","error giftId="+giftId);
+        }else{
+            Gift gift = SuperWeChatHelper.getInstance().getGiftList().get(giftId);
+            mGiftName.setText("送了一个"+gift.getGname());
+            EaseUserUtils.setAppUserPathAvatar(getContext(),gift.getGurl(),giftImage);
+        }
     }
 }

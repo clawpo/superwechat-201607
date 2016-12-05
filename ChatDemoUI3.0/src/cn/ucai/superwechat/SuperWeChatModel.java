@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 import cn.ucai.superwechat.db.UserDao;
+import cn.ucai.superwechat.domain.Gift;
 import cn.ucai.superwechat.domain.RobotUser;
 import cn.ucai.superwechat.utils.PreferenceManager;
 
@@ -297,5 +298,15 @@ public class SuperWeChatModel {
         SpakerOn,
         DisabledGroups,
         DisabledIds
+    }
+    public boolean saveGiftList(List<Gift> giftList) {
+        UserDao dao = new UserDao(context);
+        dao.saveGiftList(giftList);
+        return true;
+    }
+
+    public Map<Integer, Gift> getGiftList() {
+        UserDao dao = new UserDao(context);
+        return dao.getGiftList();
     }
 }

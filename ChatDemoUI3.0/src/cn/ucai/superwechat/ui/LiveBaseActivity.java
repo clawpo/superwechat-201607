@@ -123,7 +123,7 @@ public abstract class LiveBaseActivity extends BaseActivity {
         leftGiftView.setName(name);
         leftGiftView.setAvatar(avatar);
         leftGiftView.setTranslationY(0);
-        leftGiftView.setGiftImage(giftId);
+        leftGiftView.setGift(giftId);
         ViewAnimator.animate(leftGiftView)
             .alpha(0, 1)
             .translationX(-leftGiftView.getWidth(), 0)
@@ -166,7 +166,7 @@ public abstract class LiveBaseActivity extends BaseActivity {
         leftGiftView2.setName(name);
         leftGiftView2.setAvatar(avatar);
         leftGiftView2.setTranslationY(0);
-        leftGiftView2.setGiftImage(giftId);
+        leftGiftView2.setGift(giftId);
         ViewAnimator.animate(leftGiftView2)
             .alpha(0, 1)
             .translationX(-leftGiftView2.getWidth(), 0)

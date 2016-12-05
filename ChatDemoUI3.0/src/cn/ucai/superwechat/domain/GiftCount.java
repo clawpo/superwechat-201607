@@ -1,8 +1,10 @@
 package cn.ucai.superwechat.domain;
 
+import cn.ucai.superwechat.pojo.Gift;
+
 public class GiftCount extends Gift {
 	private int giftId;
-	private int count;
+	private int gcount;
 	private int sum;
 	public int getGiftId() {
 		return giftId;
@@ -10,11 +12,11 @@ public class GiftCount extends Gift {
 	public void setGiftId(int giftId) {
 		this.giftId = giftId;
 	}
-	public int getCount() {
-		return count;
+	public int getGcount() {
+		return gcount;
 	}
-	public void setCount(int count) {
-		this.count = count;
+	public void setGcount(int gcount) {
+		this.gcount = gcount;
 	}
 	public int getSum() {
 		return sum;

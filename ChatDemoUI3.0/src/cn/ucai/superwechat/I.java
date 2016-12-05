@@ -68,9 +68,7 @@ public interface I {
 		String anchor = "anchor";
 		String giftId = "giftId";
 		String giftNum = "giftNum";
-		String count = "count";
 		String rmb = "rmb";
-		String rdate = "rdate";
 	}
 
 //	String AVATAR_PATH 								= 		"E:/test/";

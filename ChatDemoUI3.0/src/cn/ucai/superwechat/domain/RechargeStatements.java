@@ -5,7 +5,7 @@ public class RechargeStatements {
 
     private String uname;
 
-    private Integer count;
+    private Integer rcount;
 
     private Integer rmb;
 
@@ -27,12 +27,12 @@ public class RechargeStatements {
         this.uname = uname == null ? null : uname.trim();
     }
 
-    public Integer getCount() {
-        return count;
+    public Integer getRcount() {
+        return rcount;
     }
 
-    public void setCount(Integer count) {
-        this.count = count;
+    public void setRcount(Integer rcount) {
+        this.rcount = rcount;
     }
 
     public Integer getRmb() {

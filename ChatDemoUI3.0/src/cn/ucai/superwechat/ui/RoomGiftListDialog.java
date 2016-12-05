@@ -193,7 +193,7 @@ public class RoomGiftListDialog extends DialogFragment {
             GiftViewHolder gh = (GiftViewHolder)holder;
             gh.mTvGiftName.setText(gift.getGname());
             gh.mTvGiftPrice.setText(String.valueOf(gift.getGprice()));
-            EaseUserUtils.setCurentAppUserAvatar(getActivity(),gh.mIvGiftThumb);
+            EaseUserUtils.setAppUserPathAvatar(getActivity(),gift.getGurl(),gh.mIvGiftThumb);
         }
 
         @Override

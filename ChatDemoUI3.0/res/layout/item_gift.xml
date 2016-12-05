@@ -19,26 +19,18 @@
         android:id="@+id/tvGiftName"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
-        android:textColor="@color/item_gift_text"
+        android:textColor="@color/white"
         android:textSize="13sp"
         android:maxLines="2"
         android:ellipsize="end"
         android:gravity="center"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="3dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
         android:text="商品名称"/>
     <TextView
         android:id="@+id/tvGiftPrice"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/item_gift_price"
+        android:textColor="@color/gray"
         android:textSize="13sp"
         android:gravity="center"
-        android:layout_marginTop="3dp"
-        android:layout_marginBottom="10dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
         android:text="$399.99"/>
 </LinearLayout>

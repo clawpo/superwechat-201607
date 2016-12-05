@@ -1,6 +1,5 @@
 package cn.ucai.superwechat.domain;
 
-import cn.ucai.superwechat.pojo.Gift;
 
 public class GiftCount extends Gift {
 	private int giftId;

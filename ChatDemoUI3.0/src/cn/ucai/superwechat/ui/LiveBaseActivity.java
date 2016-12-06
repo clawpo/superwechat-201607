@@ -24,7 +24,6 @@ import com.hyphenate.chat.EMCmdMessageBody;
 import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMTextMessageBody;
-import com.hyphenate.easeui.domain.User;
 import com.hyphenate.easeui.utils.EaseUserUtils;
 import com.hyphenate.exceptions.HyphenateException;
 import com.hyphenate.util.EMLog;
@@ -38,14 +37,11 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.ucai.superwechat.Constant;
+import cn.ucai.superwechat.I;
 import cn.ucai.superwechat.R;
 import cn.ucai.superwechat.SuperWeChatHelper;
-import cn.ucai.superwechat.bean.Result;
-import cn.ucai.superwechat.data.NetDao;
-import cn.ucai.superwechat.data.OkHttpUtils;
 import cn.ucai.superwechat.utils.CommonUtils;
 import cn.ucai.superwechat.utils.L;
-import cn.ucai.superwechat.utils.ResultUtils;
 import cn.ucai.superwechat.utils.Utils;
 import cn.ucai.superwechat.widget.BarrageLayout;
 import cn.ucai.superwechat.widget.LiveLeftGiftView;
@@ -89,7 +85,7 @@ public abstract class LiveBaseActivity extends BaseActivity {
 
   volatile boolean isGiftShowing = false;
   volatile boolean isGift2Showing = false;
-  List<String> toShowList = Collections.synchronizedList(new LinkedList<String>());
+  List<EMMessage> toShowList = Collections.synchronizedList(new LinkedList<EMMessage>());
 
   protected EMChatRoom chatroom;
   List<String> memberList = new ArrayList<>();
@@ -103,25 +99,38 @@ public abstract class LiveBaseActivity extends BaseActivity {
 
   protected abstract void onActivityCreate(@Nullable Bundle savedInstanceState);
 
-  protected synchronized void showLeftGiftVeiw(String name,String avatar,int giftId) {
-    L.e(TAG,"showLeftGiftVeiw,name="+name+",avatar="+avatar+",giftId="+giftId);
-    if (!isGift2Showing) {
-      showGift2Derect(name,avatar,giftId);
-    } else if (!isGiftShowing) {
-      showGift1Derect(name,avatar,giftId);
-    } else {
-      toShowList.add(avatar);
+  protected synchronized void showLeftGiftVeiw(EMMessage message) {
+    try {
+      String msgId = message.getMsgId();
+      final String nick = message.getStringAttribute(I.User.NICK);
+      final String username = message.getFrom();
+      final int giftId = message.getIntAttribute(Constant.CMD_GIFT_TYPE);
+    L.e(TAG,"showLeftGiftVeiw,nick="+nick+",username="+username+",giftId="+giftId+",msgId="+msgId);
+      if (!isGift2Showing) {
+        L.e(TAG,"showGift2Derect...");
+        showGift2Derect(message);
+      } else if (!isGiftShowing) {
+        L.e(TAG,"showGift1Derect...");
+        showGift1Derect(message);
+      } else {
+        L.e(TAG,"toShowList.add...");
+        toShowList.add(message);
+      }
+    }catch (Exception e){
+      L.e(TAG,"e="+e.getMessage());
     }
   }
 
-  private void showGift1Derect(final String name,final String avatar,final int giftId) {
-    L.e(TAG,"showGift1Derect...");
+  private void showGift1Derect(final EMMessage message) throws HyphenateException {
+    final String nick = message.getStringAttribute(I.User.NICK);
+    final String username = message.getFrom();
+    final int giftId = message.getIntAttribute(Constant.CMD_GIFT_TYPE);
     isGiftShowing = true;
     runOnUiThread(new Runnable() {
       @Override public void run() {
         leftGiftView.setVisibility(View.VISIBLE);
-        leftGiftView.setName(name);
-        leftGiftView.setAvatar(avatar);
+        leftGiftView.setName(nick);
+        leftGiftView.setAvatar(username);
         leftGiftView.setTranslationY(0);
         leftGiftView.setGift(giftId);
         ViewAnimator.animate(leftGiftView)
@@ -134,16 +143,17 @@ public abstract class LiveBaseActivity extends BaseActivity {
             .duration(800)
             .onStop(new AnimationListener.Stop() {
               @Override public void onStop() {
-                String pollName = null;
+                EMMessage pollName = null;
                 try {
                   pollName = toShowList.remove(0);
+                  L.e(TAG,"showGift1Derect...pollName="+pollName);
+                  if (pollName != null) {
+                    showGift1Derect(pollName);
+                  } else {
+                    isGiftShowing = false;
+                  }
                 } catch (Exception e) {
 
-                }
-                if (pollName != null) {
-                  showGift1Derect(pollName,avatar,giftId);
-                } else {
-                  isGiftShowing = false;
                 }
               }
             })
@@ -157,14 +167,16 @@ public abstract class LiveBaseActivity extends BaseActivity {
     });
   }
 
-  private void showGift2Derect(final String name,final String avatar,final int giftId) {
-    L.e(TAG,"showGift2Derect...");
+  private void showGift2Derect(final EMMessage message) throws HyphenateException {
+    final String nick = message.getStringAttribute(I.User.NICK);
+    final String username = message.getFrom();
+    final int giftId = message.getIntAttribute(Constant.CMD_GIFT_TYPE);
     isGift2Showing = true;
     runOnUiThread(new Runnable() {
       @Override public void run() {
         leftGiftView2.setVisibility(View.VISIBLE);
-        leftGiftView2.setName(name);
-        leftGiftView2.setAvatar(avatar);
+        leftGiftView2.setName(nick);
+        leftGiftView2.setAvatar(username);
         leftGiftView2.setTranslationY(0);
         leftGiftView2.setGift(giftId);
         ViewAnimator.animate(leftGiftView2)
@@ -177,16 +189,17 @@ public abstract class LiveBaseActivity extends BaseActivity {
             .duration(800)
             .onStop(new AnimationListener.Stop() {
               @Override public void onStop() {
-                String pollName = null;
+                EMMessage pollName = null;
                 try {
                   pollName = toShowList.remove(0);
+                  L.e(TAG,"showGift2Derect...pollName="+pollName);
+                  if (pollName != null) {
+                    showGift2Derect(pollName);
+                  } else {
+                    isGift2Showing = false;
+                  }
                 } catch (Exception e) {
 
-                }
-                if (pollName != null) {
-                  showGift2Derect(pollName,avatar,giftId);
-                } else {
-                  isGift2Showing = false;
                 }
               }
             })
@@ -284,27 +297,29 @@ public abstract class LiveBaseActivity extends BaseActivity {
       final EMMessage message = messages.get(messages.size() - 1);
       if (Constant.CMD_GIFT.equals(((EMCmdMessageBody) message.getBody()).action())) {
       final int giftId = message.getIntAttribute(Constant.CMD_GIFT_TYPE,0);
-        NetDao.searchUser(LiveBaseActivity.this, message.getFrom(), new OkHttpUtils.OnCompleteListener<String>() {
-          @Override
-          public void onSuccess(String s) {
-            if(s!=null){
-              Result result = ResultUtils.getResultFromJson(s, User.class);
-              if(result!=null && result.isRetMsg()){
-                User u = (User) result.getRetData();
-                if(u!=null && u.getMUserNick()!=null) {
-                  showLeftGiftVeiw(u.getMUserNick(),message.getFrom(),giftId);
-                }else{
-                  showLeftGiftVeiw(message.getFrom(),message.getFrom(),giftId);
-                }
-              }
-            }
-          }
-
-          @Override
-          public void onError(String error) {
-            showLeftGiftVeiw(message.getFrom(),message.getFrom(),giftId);
-          }
-        });
+        L.e(TAG,"onCmdMessageReceived,giftId="+giftId);
+        showLeftGiftVeiw(message);
+//        NetDao.searchUser(LiveBaseActivity.this, message.getFrom(), new OkHttpUtils.OnCompleteListener<String>() {
+//          @Override
+//          public void onSuccess(String s) {
+//            if(s!=null){
+//              Result result = ResultUtils.getResultFromJson(s, User.class);
+//              if(result!=null && result.isRetMsg()){
+//                User u = (User) result.getRetData();
+//                if(u!=null && u.getMUserNick()!=null) {
+//                  showLeftGiftVeiw(u.getMUserNick(),message.getFrom(),giftId);
+//                }else{
+//                  showLeftGiftVeiw(message.getFrom(),message.getFrom(),giftId);
+//                }
+//              }
+//            }
+//          }
+//
+//          @Override
+//          public void onError(String error) {
+//            showLeftGiftVeiw(message.getFrom(),message.getFrom(),giftId);
+//          }
+//        });
       }
     }
 
@@ -500,17 +515,19 @@ public abstract class LiveBaseActivity extends BaseActivity {
               public void onClick(View v) {
                 dialog.dismiss();
                 int giftId = (int) v.getTag();
-                L.e(TAG,"giftId="+giftId);
+                L.e(TAG,"onPresentImageClick giftId="+giftId);
+                String nick = SuperWeChatHelper.getInstance().getAppContactList()
+                        .get(EMClient.getInstance().getCurrentUser()).getMUserNick();
                 EMMessage message = EMMessage.createSendMessage(EMMessage.Type.CMD);
                 message.setReceipt(chatroomId);
                 EMCmdMessageBody cmdMessageBody = new EMCmdMessageBody(Constant.CMD_GIFT);
                 message.addBody(cmdMessageBody);
                 message.setAttribute(Constant.CMD_GIFT_TYPE,giftId);
+                message.setAttribute(I.User.NICK,nick);
+                message.setAttribute(I.User.USER_NAME,EMClient.getInstance().getCurrentUser());
                 message.setChatType(EMMessage.ChatType.ChatRoom);
                 EMClient.getInstance().chatManager().sendMessage(message);
-                showLeftGiftVeiw(SuperWeChatHelper.getInstance().getAppContactList()
-                                .get(EMClient.getInstance().getCurrentUser()).getMUserNick(),
-                        EMClient.getInstance().getCurrentUser(),giftId);
+                showLeftGiftVeiw(message);
 
               }
             }

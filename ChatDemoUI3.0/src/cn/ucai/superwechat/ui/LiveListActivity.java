@@ -170,7 +170,7 @@ public class LiveListActivity extends BaseActivity {
         return null;
     }
 
-    @OnClick(R.id.txt_title)
+    @OnClick(R.id.img_back)
     public void onBackClick() {
         MFGT.finish(this);
     }

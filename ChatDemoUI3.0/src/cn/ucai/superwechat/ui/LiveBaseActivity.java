@@ -105,19 +105,15 @@ public abstract class LiveBaseActivity extends BaseActivity {
       final String nick = message.getStringAttribute(I.User.NICK);
       final String username = message.getFrom();
       final int giftId = message.getIntAttribute(Constant.CMD_GIFT_TYPE);
-    L.e(TAG,"showLeftGiftVeiw,nick="+nick+",username="+username+",giftId="+giftId+",msgId="+msgId);
       if (!isGift2Showing) {
-        L.e(TAG,"showGift2Derect...");
         showGift2Derect(message);
       } else if (!isGiftShowing) {
-        L.e(TAG,"showGift1Derect...");
         showGift1Derect(message);
       } else {
-        L.e(TAG,"toShowList.add...");
         toShowList.add(message);
       }
     }catch (Exception e){
-      L.e(TAG,"e="+e.getMessage());
+      L.e(TAG,"e="+e.toString());
     }
   }
 
@@ -145,19 +141,23 @@ public abstract class LiveBaseActivity extends BaseActivity {
               @Override public void onStop() {
                 EMMessage pollName = null;
                 try {
-                  pollName = toShowList.remove(0);
-                  L.e(TAG,"showGift1Derect...pollName="+pollName);
-                  if (pollName != null) {
-                    showGift1Derect(pollName);
-                  } else {
+                  if(toShowList.size()>0) {
+                    pollName = toShowList.remove(0);
+                    if (pollName != null) {
+                      showGift1Derect(pollName);
+                    } else {
+                      isGiftShowing = false;
+                    }
+                  }else {
                     isGiftShowing = false;
                   }
                 } catch (Exception e) {
-
+                  L.e(TAG,"showGift1Derect,e="+e.toString());
+                  isGift2Showing = false;
                 }
               }
             })
-            .startDelay(2000)
+            .startDelay(200)
             .start();
         ViewAnimator.animate(leftGiftView.getGiftImageView())
             .translationX(-leftGiftView.getGiftImageView().getX(), 0)
@@ -168,17 +168,17 @@ public abstract class LiveBaseActivity extends BaseActivity {
   }
 
   private void showGift2Derect(final EMMessage message) throws HyphenateException {
-    final String nick = message.getStringAttribute(I.User.NICK);
-    final String username = message.getFrom();
-    final int giftId = message.getIntAttribute(Constant.CMD_GIFT_TYPE);
+    final String nick2 = message.getStringAttribute(I.User.NICK);
+    final String username2 = message.getFrom();
+    final int giftId2 = message.getIntAttribute(Constant.CMD_GIFT_TYPE);
     isGift2Showing = true;
     runOnUiThread(new Runnable() {
       @Override public void run() {
         leftGiftView2.setVisibility(View.VISIBLE);
-        leftGiftView2.setName(nick);
-        leftGiftView2.setAvatar(username);
+        leftGiftView2.setName(nick2);
+        leftGiftView2.setAvatar(username2);
         leftGiftView2.setTranslationY(0);
-        leftGiftView2.setGift(giftId);
+        leftGiftView2.setGift(giftId2);
         ViewAnimator.animate(leftGiftView2)
             .alpha(0, 1)
             .translationX(-leftGiftView2.getWidth(), 0)
@@ -189,21 +189,25 @@ public abstract class LiveBaseActivity extends BaseActivity {
             .duration(800)
             .onStop(new AnimationListener.Stop() {
               @Override public void onStop() {
-                EMMessage pollName = null;
+                EMMessage pollName2 = null;
                 try {
-                  pollName = toShowList.remove(0);
-                  L.e(TAG,"showGift2Derect...pollName="+pollName);
-                  if (pollName != null) {
-                    showGift2Derect(pollName);
+                  if(toShowList.size()>0) {
+                    pollName2 = toShowList.remove(0);
+                    if (pollName2 != null) {
+                      showGift2Derect(pollName2);
+                    } else {
+                      isGift2Showing = false;
+                    }
                   } else {
                     isGift2Showing = false;
                   }
                 } catch (Exception e) {
-
+                  L.e(TAG,"showGift2Derect,e="+e.toString());
+                  isGift2Showing = false;
                 }
               }
             })
-            .startDelay(2000)
+            .startDelay(200)
             .start();
         ViewAnimator.animate(leftGiftView2.getGiftImageView())
             .translationX(-leftGiftView2.getGiftImageView().getX(), 0)
@@ -296,8 +300,7 @@ public abstract class LiveBaseActivity extends BaseActivity {
     @Override public void onCmdMessageReceived(List<EMMessage> messages) {
       final EMMessage message = messages.get(messages.size() - 1);
       if (Constant.CMD_GIFT.equals(((EMCmdMessageBody) message.getBody()).action())) {
-      final int giftId = message.getIntAttribute(Constant.CMD_GIFT_TYPE,0);
-        L.e(TAG,"onCmdMessageReceived,giftId="+giftId);
+        L.e(TAG,"onCmdMessageReceived,giftId="+message);
         showLeftGiftVeiw(message);
 //        NetDao.searchUser(LiveBaseActivity.this, message.getFrom(), new OkHttpUtils.OnCompleteListener<String>() {
 //          @Override
@@ -515,7 +518,6 @@ public abstract class LiveBaseActivity extends BaseActivity {
               public void onClick(View v) {
                 dialog.dismiss();
                 int giftId = (int) v.getTag();
-                L.e(TAG,"onPresentImageClick giftId="+giftId);
                 String nick = SuperWeChatHelper.getInstance().getAppContactList()
                         .get(EMClient.getInstance().getCurrentUser()).getMUserNick();
                 EMMessage message = EMMessage.createSendMessage(EMMessage.Type.CMD);

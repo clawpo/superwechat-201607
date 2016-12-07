@@ -159,4 +159,12 @@ public class NetDao {
                 .targetClass(String.class)
                 .execute(listener);
     }
+
+    public static void getBalance(Context context, String username, OkHttpUtils.OnCompleteListener<String> listener){
+        OkHttpUtils<String> utils = new OkHttpUtils<>(context);
+        utils.setRequestUrl(I.REQUEST_BALANCE)
+                .addParam(I.Live.uname,username)
+                .targetClass(String.class)
+                .execute(listener);
+    }
 }

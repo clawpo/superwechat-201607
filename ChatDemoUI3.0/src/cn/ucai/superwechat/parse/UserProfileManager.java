@@ -4,13 +4,19 @@ import android.content.Context;
 
 import com.hyphenate.EMValueCallBack;
 import com.hyphenate.chat.EMClient;
-import cn.ucai.superwechat.SuperWeChatHelper;
-import cn.ucai.superwechat.SuperWeChatHelper.DataSyncListener;
-import cn.ucai.superwechat.utils.PreferenceManager;
 import com.hyphenate.easeui.domain.EaseUser;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import cn.ucai.superwechat.SuperWeChatHelper;
+import cn.ucai.superwechat.SuperWeChatHelper.DataSyncListener;
+import cn.ucai.superwechat.bean.Result;
+import cn.ucai.superwechat.data.NetDao;
+import cn.ucai.superwechat.data.OkHttpUtils;
+import cn.ucai.superwechat.domain.Wallet;
+import cn.ucai.superwechat.utils.PreferenceManager;
+import cn.ucai.superwechat.utils.ResultUtils;
 
 public class UserProfileManager {
 
@@ -157,6 +163,29 @@ public class UserProfileManager {
 			}
 		});
 
+		NetDao.getBalance(appContext, EMClient.getInstance().getCurrentUser(), new OkHttpUtils.OnCompleteListener<String>() {
+			@Override
+			public void onSuccess(String s) {
+				if(s!=null){
+					Result result = ResultUtils.getResultFromJson(s, Wallet.class);
+					if(result!=null && result.isRetMsg()){
+						Wallet wallet = (Wallet) result.getRetData();
+						if(wallet!=null) {
+							setCurrentUserChange(wallet.getBalance());
+						}else{
+							setCurrentUserChange(0);
+						}
+					}else{
+						setCurrentUserChange(0);
+					}
+				}
+			}
+
+			@Override
+			public void onError(String error) {
+				setCurrentUserChange(0);
+			}
+		});
 	}
 	public void asyncGetUserInfo(final String username,final EMValueCallBack<EaseUser> callback){
 		ParseManager.getInstance().asyncGetUserInfo(username, callback);
@@ -177,6 +206,14 @@ public class UserProfileManager {
 
 	private String getCurrentUserAvatar() {
 		return PreferenceManager.getInstance().getCurrentUserAvatar();
+	}
+
+	public void setCurrentUserChange(int change) {
+		PreferenceManager.getInstance().setCurrentUserChange(change);
+	}
+
+	public int getCurrentUserChange() {
+		return PreferenceManager.getInstance().getCurrentUserChange();
 	}
 
 }

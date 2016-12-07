@@ -13,6 +13,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.ucai.superwechat.R;
+import cn.ucai.superwechat.SuperWeChatHelper;
 import cn.ucai.superwechat.bean.Result;
 import cn.ucai.superwechat.data.NetDao;
 import cn.ucai.superwechat.data.OkHttpUtils;
@@ -36,6 +37,7 @@ public class ChangeActivity extends BaseActivity {
     LinearLayout contentContainer;
 
     private View loadingView;
+    int change;
 
     @Override
     protected void onCreate(Bundle arg0) {
@@ -50,6 +52,9 @@ public class ChangeActivity extends BaseActivity {
         //add loading view
         loadingView = LayoutInflater.from(this).inflate(R.layout.rp_loading, contentContainer, false);
         contentContainer.addView(loadingView);
+        change = SuperWeChatHelper.getInstance().getUserProfileManager().getCurrentUserChange();
+        setChangeText(change);
+
         NetDao.getBalance(this, EMClient.getInstance().getCurrentUser(), new OkHttpUtils.OnCompleteListener<String>() {
             @Override
             public void onSuccess(String s) {
@@ -57,8 +62,12 @@ public class ChangeActivity extends BaseActivity {
                     Result result = ResultUtils.getResultFromJson(s, Wallet.class);
                     if(result!=null && result.isRetMsg()){
                         Wallet wallet = (Wallet) result.getRetData();
-                        mTvChangeBalance.setText("¥ "+ Float.parseFloat(wallet.getBalance().toString()));
-
+                        if(wallet!=null) {
+                            setChangeText(wallet.getBalance());
+                            SuperWeChatHelper.getInstance().getUserProfileManager().setCurrentUserChange(wallet.getBalance());
+                        }else{
+                            setChangeText(0);
+                        }
                     }
                 }
                 loadingView.setVisibility(View.GONE);
@@ -69,6 +78,10 @@ public class ChangeActivity extends BaseActivity {
                 loadingView.setVisibility(View.GONE);
             }
         });
+    }
+
+    private void setChangeText(int balance) {
+        mTvChangeBalance.setText("¥ "+ Float.parseFloat(String.valueOf(balance)));
     }
 
     private void initView() {

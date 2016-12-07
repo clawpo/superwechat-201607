@@ -216,4 +216,12 @@ public class UserProfileManager {
 		return PreferenceManager.getInstance().getCurrentUserChange();
 	}
 
+	public void setPaymentTips(boolean tips) {
+		PreferenceManager.getInstance().setPaymentTips(tips);
+	}
+
+	public boolean getPaymentTips() {
+		return PreferenceManager.getInstance().getPaymentTips();
+	}
+
 }

@@ -1,16 +1,21 @@
 package cn.ucai.superwechat.ui;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.github.florent37.viewanimator.AnimationListener;
@@ -40,6 +45,7 @@ import cn.ucai.superwechat.Constant;
 import cn.ucai.superwechat.I;
 import cn.ucai.superwechat.R;
 import cn.ucai.superwechat.SuperWeChatHelper;
+import cn.ucai.superwechat.domain.Gift;
 import cn.ucai.superwechat.utils.CommonUtils;
 import cn.ucai.superwechat.utils.L;
 import cn.ucai.superwechat.utils.Utils;
@@ -516,25 +522,64 @@ public abstract class LiveBaseActivity extends BaseActivity {
             new View.OnClickListener() {
               @Override
               public void onClick(View v) {
-                dialog.dismiss();
-                int giftId = (int) v.getTag();
-                String nick = SuperWeChatHelper.getInstance().getAppContactList()
-                        .get(EMClient.getInstance().getCurrentUser()).getMUserNick();
-                EMMessage message = EMMessage.createSendMessage(EMMessage.Type.CMD);
-                message.setReceipt(chatroomId);
-                EMCmdMessageBody cmdMessageBody = new EMCmdMessageBody(Constant.CMD_GIFT);
-                message.addBody(cmdMessageBody);
-                message.setAttribute(Constant.CMD_GIFT_TYPE,giftId);
-                message.setAttribute(I.User.NICK,nick);
-                message.setAttribute(I.User.USER_NAME,EMClient.getInstance().getCurrentUser());
-                message.setChatType(EMMessage.ChatType.ChatRoom);
-                EMClient.getInstance().chatManager().sendMessage(message);
-                showLeftGiftVeiw(message);
-
+                showPaymentTips(dialog,v);
               }
             }
     );
     dialog.show(getSupportFragmentManager(), "RoomGiftListDialog");
+  }
+
+  private void showPaymentTips(final RoomGiftListDialog dialog, final View v){
+    if(!SuperWeChatHelper.getInstance().getUserProfileManager().getPaymentTips()) {
+      int giftId = (int) v.getTag();
+      Gift gift = SuperWeChatHelper.getInstance().getGiftList().get(giftId);
+      if(gift!=null) {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(LiveBaseActivity.this);
+        builder.setTitle("提示");
+        builder.setMessage("需要消费微信币:"+gift.getGprice()+",确认支付么?");
+        LinearLayout linearLayout = (LinearLayout) getLayoutInflater().inflate(R.layout.payment_tips, null);
+        CheckBox cb = (CheckBox) linearLayout.findViewById(R.id.payment_tips_nomore);
+        cb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+          @Override
+          public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+            L.e(TAG,"set payment tips is "+isChecked);
+            SuperWeChatHelper.getInstance().getUserProfileManager().setPaymentTips(isChecked);
+          }
+        });
+        builder.setView(linearLayout);
+        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+          public void onClick(DialogInterface d, int which) {
+            sendGiftMes(dialog,v);
+          }
+        });
+        builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+          public void onClick(DialogInterface dialog, int which) {
+          }
+        });
+
+        builder.create().show();
+      }
+    }else{
+      sendGiftMes(dialog,v);
+    }
+  }
+
+  private void sendGiftMes(RoomGiftListDialog dialog, View v) {
+    dialog.dismiss();
+    int giftId = (int) v.getTag();
+    String nick = SuperWeChatHelper.getInstance().getAppContactList()
+            .get(EMClient.getInstance().getCurrentUser()).getMUserNick();
+    EMMessage message = EMMessage.createSendMessage(EMMessage.Type.CMD);
+    message.setReceipt(chatroomId);
+    EMCmdMessageBody cmdMessageBody = new EMCmdMessageBody(Constant.CMD_GIFT);
+    message.addBody(cmdMessageBody);
+    message.setAttribute(Constant.CMD_GIFT_TYPE,giftId);
+    message.setAttribute(I.User.NICK,nick);
+    message.setAttribute(I.User.USER_NAME,EMClient.getInstance().getCurrentUser());
+    message.setChatType(EMMessage.ChatType.ChatRoom);
+    EMClient.getInstance().chatManager().sendMessage(message);
+    showLeftGiftVeiw(message);
+
   }
 
   @OnClick(R.id.screenshot_image) void onScreenshotImageClick(){

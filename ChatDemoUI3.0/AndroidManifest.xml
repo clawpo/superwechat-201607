@@ -310,6 +310,11 @@
             android:windowSoftInputMode="adjustResize|stateHidden"/>
         <!-- 零钱 -->
         <activity
+            android:name=".ui.ChangeActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/horizontal_slide"
+            android:windowSoftInputMode="adjustResize|stateHidden"/>
+        <activity
             android:name="com.easemob.redpacketui.ui.activity.RPChangeActivity"
             android:screenOrientation="portrait"
             android:theme="@style/horizontal_slide"

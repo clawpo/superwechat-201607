@@ -315,6 +315,16 @@
             android:theme="@style/horizontal_slide"
             android:windowSoftInputMode="adjustResize|stateHidden"/>
         <activity
+            android:name=".ui.DrawCashActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/horizontal_slide"
+            android:windowSoftInputMode="adjustResize|stateHidden"/>
+        <activity
+            android:name=".ui.RechargeActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/horizontal_slide"
+            android:windowSoftInputMode="adjustResize|stateHidden"/>
+        <activity
             android:name="com.easemob.redpacketui.ui.activity.RPChangeActivity"
             android:screenOrientation="portrait"
             android:theme="@style/horizontal_slide"

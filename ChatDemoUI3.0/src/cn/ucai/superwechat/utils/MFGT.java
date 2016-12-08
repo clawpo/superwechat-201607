@@ -10,12 +10,14 @@ import cn.ucai.superwechat.ui.AddContactActivity;
 import cn.ucai.superwechat.ui.AddFriendActivity;
 import cn.ucai.superwechat.ui.ChangeActivity;
 import cn.ucai.superwechat.ui.ChatActivity;
+import cn.ucai.superwechat.ui.DrawCashActivity;
 import cn.ucai.superwechat.ui.FriendProfileActivity;
 import cn.ucai.superwechat.ui.GroupsActivity;
 import cn.ucai.superwechat.ui.LoginActivity;
 import cn.ucai.superwechat.ui.NewFriendsMsgActivity;
 import cn.ucai.superwechat.ui.NewGroupActivity;
 import cn.ucai.superwechat.ui.PublicGroupsActivity;
+import cn.ucai.superwechat.ui.RechargeActivity;
 import cn.ucai.superwechat.ui.RegisterActivity;
 import cn.ucai.superwechat.ui.SettingsActivity;
 import cn.ucai.superwechat.ui.UserProfileActivity;
@@ -101,5 +103,13 @@ public class MFGT {
 
     public static void gotoChange(Activity context) {
         startActivity(context, ChangeActivity.class);
+    }
+
+    public static void gotoRechange(Activity context) {
+        startActivity(context, RechargeActivity.class);
+    }
+
+    public static void gotoDrawCash(Activity context){
+        startActivity(context, DrawCashActivity.class);
     }
 }

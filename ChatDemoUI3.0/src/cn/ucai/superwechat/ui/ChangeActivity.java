@@ -58,14 +58,14 @@ public class ChangeActivity extends BaseActivity {
         NetDao.getBalance(this, EMClient.getInstance().getCurrentUser(), new OkHttpUtils.OnCompleteListener<String>() {
             @Override
             public void onSuccess(String s) {
-                if(s!=null){
+                if (s != null) {
                     Result result = ResultUtils.getResultFromJson(s, Wallet.class);
-                    if(result!=null && result.isRetMsg()){
+                    if (result != null && result.isRetMsg()) {
                         Wallet wallet = (Wallet) result.getRetData();
-                        if(wallet!=null) {
+                        if (wallet != null) {
                             setChangeText(wallet.getBalance());
                             SuperWeChatHelper.getInstance().getUserProfileManager().setCurrentUserChange(wallet.getBalance());
-                        }else{
+                        } else {
                             setChangeText(0);
                         }
                     }
@@ -81,7 +81,7 @@ public class ChangeActivity extends BaseActivity {
     }
 
     private void setChangeText(int balance) {
-        mTvChangeBalance.setText("¥ "+ Float.parseFloat(String.valueOf(balance)));
+        mTvChangeBalance.setText("¥ " + Float.parseFloat(String.valueOf(balance)));
     }
 
     private void initView() {
@@ -90,8 +90,18 @@ public class ChangeActivity extends BaseActivity {
         mTxtTitle.setText(R.string.title_small_change);
     }
 
-    @OnClick(R.id.img_back)
-    public void onBackClick() {
-        MFGT.finish(this);
+    @OnClick({R.id.img_back, R.id.tv_change_recharge, R.id.tv_change_withdraw})
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.img_back:
+                MFGT.finish(this);
+                break;
+            case R.id.tv_change_recharge:
+                MFGT.gotoRechange(this);
+                break;
+            case R.id.tv_change_withdraw:
+                MFGT.gotoDrawCash(this);
+                break;
+        }
     }
 }

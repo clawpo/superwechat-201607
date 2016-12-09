@@ -29,6 +29,7 @@ import com.hyphenate.chat.EMCmdMessageBody;
 import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMTextMessageBody;
+import com.hyphenate.easeui.domain.User;
 import com.hyphenate.easeui.utils.EaseUserUtils;
 import com.hyphenate.exceptions.HyphenateException;
 import com.hyphenate.util.EMLog;
@@ -101,6 +102,9 @@ public abstract class LiveBaseActivity extends BaseActivity {
   protected EMChatRoom chatroom;
   List<String> memberList = new ArrayList<>();
 
+  String currentUserNick;
+  String username = EMClient.getInstance().getCurrentUser();
+
   @Override protected void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     onActivityCreate(savedInstanceState);
@@ -112,10 +116,6 @@ public abstract class LiveBaseActivity extends BaseActivity {
 
   protected synchronized void showLeftGiftVeiw(EMMessage message) {
     try {
-      String msgId = message.getMsgId();
-      final String nick = message.getStringAttribute(I.User.NICK);
-      final String username = message.getFrom();
-      final int giftId = message.getIntAttribute(Constant.CMD_GIFT_TYPE);
       if (!isGift2Showing) {
         showGift2Derect(message);
       } else if (!isGiftShowing) {
@@ -357,6 +357,13 @@ public abstract class LiveBaseActivity extends BaseActivity {
   };
 
   protected void onMessageListInit() {
+    User u = SuperWeChatHelper.getInstance().getAppContactList().get(EMClient.getInstance().getCurrentUser());
+    if(u!=null){
+      currentUserNick = u.getMUserNick();
+    }
+    if(currentUserNick==null){
+      currentUserNick = EMClient.getInstance().getCurrentUser();
+    }
     runOnUiThread(new Runnable() {
       @Override public void run() {
         messageView.init(chatroomId);
@@ -368,6 +375,7 @@ public abstract class LiveBaseActivity extends BaseActivity {
               barrageLayout.addBarrage(content, EMClient.getInstance().getCurrentUser());
             }
             message.setChatType(EMMessage.ChatType.ChatRoom);
+            message.setAttribute(I.User.NICK,currentUserNick);
             EMClient.getInstance().chatManager().sendMessage(message);
             message.setMessageStatusCallback(new EMCallBack() {
               @Override public void onSuccess() {
@@ -618,18 +626,17 @@ public abstract class LiveBaseActivity extends BaseActivity {
   }
 
   private void sendGiftShowMsg(final RoomGiftListDialog dialog, final View v) {
-    String username = EMClient.getInstance().getCurrentUser();
     int giftId = (int) v.getTag();
     //发送消息
     dialog.dismiss();
-    String nick = SuperWeChatHelper.getInstance().getAppContactList()
-            .get(username).getMUserNick();
+//    String nick = SuperWeChatHelper.getInstance().getAppContactList()
+//            .get(username).getMUserNick();
     EMMessage message = EMMessage.createSendMessage(EMMessage.Type.CMD);
     message.setReceipt(chatroomId);
     EMCmdMessageBody cmdMessageBody = new EMCmdMessageBody(Constant.CMD_GIFT);
     message.addBody(cmdMessageBody);
     message.setAttribute(Constant.CMD_GIFT_TYPE, giftId);
-    message.setAttribute(I.User.NICK, nick);
+    message.setAttribute(I.User.NICK, currentUserNick);
     message.setAttribute(I.User.USER_NAME, username);
     message.setChatType(EMMessage.ChatType.ChatRoom);
     EMClient.getInstance().chatManager().sendMessage(message);

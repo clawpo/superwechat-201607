@@ -15,6 +15,7 @@ import com.hyphenate.EMValueCallBack;
 import com.hyphenate.chat.EMChatRoom;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.easeui.controller.EaseUI;
+import com.hyphenate.easeui.utils.EaseUserUtils;
 import com.ucloud.common.logger.L;
 import com.ucloud.player.widget.v2.UVideoView;
 
@@ -36,6 +37,7 @@ public class LiveDetailsActivity extends LiveBaseActivity implements UVideoView.
     @BindView(R.id.loading_text) TextView loadingText;
     @BindView(R.id.cover_image) ImageView coverView;
     @BindView(R.id.tv_username) TextView usernameView;
+    @BindView(R.id.iv_useravatar) ImageView mIvUseravatar;
 
     @Override
     protected void onActivityCreate(@Nullable Bundle savedInstanceState) {
@@ -54,6 +56,7 @@ public class LiveDetailsActivity extends LiveBaseActivity implements UVideoView.
 
         anchorId = liveRoom.getAnchorId();
         usernameView.setText(anchorId);
+        EaseUserUtils.setAppUserAvatar(this,anchorId,mIvUseravatar);
 
         mVideoView = (UVideoView) findViewById(R.id.videoview);
 

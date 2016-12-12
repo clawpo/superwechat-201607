@@ -11,11 +11,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.hyphenate.EMChatRoomChangeListener;
 import com.hyphenate.chat.EMChatRoom;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMCursorResult;
+import com.hyphenate.easeui.utils.EaseUserUtils;
 import com.hyphenate.exceptions.HyphenateException;
 
 import java.util.ArrayList;
@@ -160,7 +160,7 @@ public class LiveListActivity extends BaseActivity {
                 liveRoom.setAudienceNum(room.getAffiliationsCount());
                 liveRoom.setId(room.getId());
                 liveRoom.setChatroomId(room.getId());
-                liveRoom.setCover(R.drawable.default_hd_avatar);
+                liveRoom.setCover(EaseUserUtils.getChatRoomCover(room.getId()));
                 liveRoom.setAnchorId(room.getOwner());
                 roomList.add(liveRoom);
             }
@@ -216,10 +216,12 @@ public class LiveListActivity extends BaseActivity {
             LiveRoom liveRoom = liveRoomList.get(position);
             holder.anchor.setText(liveRoom.getName());
             holder.audienceNum.setText(liveRoom.getAudienceNum() + "人");
-            Glide.with(context)
-                    .load(liveRoomList.get(position).getCover())
-                    .placeholder(R.color.placeholder)
-                    .into(holder.imageView);
+            L.e("LiveActivity","cover="+liveRoom.getCover());
+            EaseUserUtils.setAppUserPathAvatar(context,liveRoom.getCover(),holder.imageView);
+//            Glide.with(context)
+//                    .load(liveRoomList.get(position).getCover())
+//                    .placeholder(R.color.placeholder)
+//                    .into(holder.imageView);
         }
 
         @Override

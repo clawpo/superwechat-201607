@@ -162,5 +162,9 @@ public class Group implements Serializable{
 		String path = "http://101.251.196.90:8000/SuperWeChatServerV2.0/downloadAvatar?name_or_hxid="+hxid+"&avatarType=group_icon&m_avatar_suffix=.jpg&updatetime=";
 		return path;
 	}
+	public static String getChatRoomAvatar(String hxid){
+		String path = "http://101.251.196.90:8000/SuperWeChatServerV2.0/downloadAvatar?name_or_hxid="+hxid+"&avatarType=chatroom_icon&m_avatar_suffix=.jpg&updatetime=";
+		return path;
+	}
 	
 }

@@ -111,6 +111,7 @@ public class EaseUserUtils {
      * @param hxid
      */
     public static void setAppGroupAvatar(Context context, String hxid, ImageView imageView){
+        Log.e(TAG,"Group.getAvatar(hxid)="+Group.getAvatar(hxid));
         if(hxid != null){
             try {
                 int avatarResId = Integer.parseInt(Group.getAvatar(hxid));
@@ -184,5 +185,9 @@ public class EaseUserUtils {
 
     public static void setAppUserName(String suffix, String username, TextView textView) {
         textView.setText(suffix + username);
+    }
+
+    public static String getChatRoomCover(String roomId){
+        return Group.getChatRoomAvatar(roomId);
     }
 }

@@ -43,7 +43,7 @@ public class LiveRoom implements Parcelable {
     }
 
     public void setCover(String cover) {
-        this.cover = cover;
+        this.cover = getCoverString(cover);
     }
 
     public String getChatroomId() {
@@ -107,5 +107,10 @@ public class LiveRoom implements Parcelable {
                 ", chatroomId='" + chatroomId + '\'' +
                 ", anchorId='" + anchorId + '\'' +
                 '}';
+    }
+
+    public static String getCoverString(String cover){
+        String path = "http://101.251.196.90:8000/SuperWeChatServerV2.0/downloadAvatar?name_or_hxid="+cover+"&avatarType=chatroom_icon&m_avatar_suffix=.jpg&updatetime=";
+        return path;
     }
 }

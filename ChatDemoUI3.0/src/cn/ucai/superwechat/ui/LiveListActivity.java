@@ -160,7 +160,7 @@ public class LiveListActivity extends BaseActivity {
                 liveRoom.setAudienceNum(room.getAffiliationsCount());
                 liveRoom.setId(room.getId());
                 liveRoom.setChatroomId(room.getId());
-                liveRoom.setCover(EaseUserUtils.getChatRoomCover(room.getId()));
+                liveRoom.setCover(room.getId());
                 liveRoom.setAnchorId(room.getOwner());
                 roomList.add(liveRoom);
             }

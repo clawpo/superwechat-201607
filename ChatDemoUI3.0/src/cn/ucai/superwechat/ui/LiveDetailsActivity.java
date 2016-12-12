@@ -11,6 +11,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.hyphenate.EMValueCallBack;
 import com.hyphenate.chat.EMChatRoom;
 import com.hyphenate.chat.EMClient;
@@ -51,9 +52,12 @@ public class LiveDetailsActivity extends LiveBaseActivity implements UVideoView.
         LiveRoom liveRoom = getIntent().getParcelableExtra("liveroom");
         liveId = liveRoom.getId();
         chatroomId = liveRoom.getChatroomId();
-//        int coverRes = liveRoom.getCover();
+        String coverRes = liveRoom.getCover();
+        Glide.with(this)
+                .load(coverRes)
+                .placeholder(R.color.placeholder)
+                .into(coverView);
 //        coverView.setImageResource(coverRes);
-        EaseUserUtils.setAppUserPathAvatar(this,liveRoom.getCover(),coverView);
 
         anchorId = liveRoom.getAnchorId();
         usernameView.setText(anchorId);

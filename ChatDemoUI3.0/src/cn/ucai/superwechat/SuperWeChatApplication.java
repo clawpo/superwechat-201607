@@ -18,6 +18,7 @@ import android.content.Context;
 import android.support.multidex.MultiDex;
 
 import com.easemob.redpacketsdk.RedPacket;
+import com.ucloud.live.UEasyStreaming;
 
 public class SuperWeChatApplication extends Application {
 
@@ -44,6 +45,7 @@ public class SuperWeChatApplication extends Application {
 		RedPacket.getInstance().initContext(applicationContext);
 		RedPacket.getInstance().setDebugMode(true);
 		//end of red packet code
+		UEasyStreaming.initStreaming("publish3-key");
 	}
 
 	public static SuperWeChatApplication getInstance() {

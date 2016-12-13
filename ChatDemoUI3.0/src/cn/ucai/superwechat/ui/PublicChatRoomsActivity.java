@@ -15,7 +15,6 @@
 package cn.ucai.superwechat.ui;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -41,11 +40,13 @@ import com.hyphenate.EMChatRoomChangeListener;
 import com.hyphenate.chat.EMChatRoom;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMCursorResult;
-import cn.ucai.superwechat.R;
 import com.hyphenate.exceptions.HyphenateException;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import cn.ucai.superwechat.R;
+import cn.ucai.superwechat.utils.MFGT;
 
 public class PublicChatRoomsActivity extends BaseActivity {
 	private ProgressBar pb;
@@ -165,8 +166,14 @@ public class PublicChatRoomsActivity extends BaseActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 
                 final EMChatRoom room = adapter.getItem(position);
-                startActivity(new Intent(PublicChatRoomsActivity.this, ChatActivity.class).putExtra("chatType", 3).
-                		putExtra("userId", room.getId()));
+//                startActivity(new Intent(PublicChatRoomsActivity.this, ChatActivity.class).putExtra("chatType", 3).
+//                		putExtra("userId", room.getId()));
+				String username = EMClient.getInstance().getCurrentUser();
+				if(room.getOwner().equals(username)){
+					MFGT.gotoStartLive(PublicChatRoomsActivity.this);
+				}else{
+					MFGT.gotoLiveDetails(PublicChatRoomsActivity.this);
+				}
                 
             }
         });

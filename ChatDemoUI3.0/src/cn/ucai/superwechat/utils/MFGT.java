@@ -6,6 +6,8 @@ import android.content.Intent;
 
 import cn.ucai.superwechat.I;
 import cn.ucai.superwechat.R;
+import cn.ucai.superwechat.live.ui.activity.LiveDetailsActivity;
+import cn.ucai.superwechat.live.ui.activity.StartLiveActivity;
 import cn.ucai.superwechat.ui.AddContactActivity;
 import cn.ucai.superwechat.ui.AddFriendActivity;
 import cn.ucai.superwechat.ui.ChatActivity;
@@ -96,5 +98,11 @@ public class MFGT {
     }
     public static void gotoPublicGroup(Activity context) {
         startActivity(context, PublicGroupsActivity.class);
+    }
+    public static void gotoStartLive(Activity context) {
+        startActivity(context, StartLiveActivity.class);
+    }
+    public static void gotoLiveDetails(Activity context) {
+        startActivity(context, LiveDetailsActivity.class);
     }
 }

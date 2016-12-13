@@ -32,11 +32,11 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.hyphenate.EMChatRoomChangeListener;
 import com.hyphenate.chat.EMChatRoom;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMCursorResult;
+import com.hyphenate.easeui.utils.EaseUserUtils;
 import com.hyphenate.exceptions.HyphenateException;
 
 import java.util.ArrayList;
@@ -419,18 +419,15 @@ public class PublicChatRoomsActivity extends BaseActivity {
                 final LiveRoom liveRoom = liveRoomList.get(position);
                 hv.anchor.setText(liveRoom.getName());
                 hv.audienceNum.setText(liveRoom.getAudienceNum() + "人");
-                Glide.with(context)
-                        .load(liveRoomList.get(position).getCover())
-                        .placeholder(R.color.placeholder)
-                        .into(hv.imageView);
+                EaseUserUtils.setCover(context,liveRoom.getCover(),((LiveViewHolder) holder).imageView);
                 hv.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         String username = EMClient.getInstance().getCurrentUser();
                         if(liveRoom.getAnchorId().equals(username)){
-                            MFGT.gotoStartLive(context);
+                            MFGT.gotoStartLive(context,liveRoom);
                         }else{
-                            MFGT.gotoLiveDetails(context);
+                            MFGT.gotoLiveDetails(context,liveRoom);
                         }
                     }
                 });

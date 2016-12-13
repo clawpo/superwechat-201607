@@ -34,6 +34,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.ucai.superwechat.R;
+import cn.ucai.superwechat.live.data.model.LiveRoom;
 import cn.ucai.superwechat.live.data.model.LiveSettings;
 import cn.ucai.superwechat.live.utils.Log2FileUtil;
 
@@ -81,8 +82,13 @@ public class StartLiveActivity extends LiveBaseActivity
     setContentView(R.layout.activity_start_live);
     ButterKnife.bind(this);
 
-    liveId = "272476317952246288";//TestDataRepository.getLiveRoomId(EMClient.getInstance().getCurrentUser());
-    chatroomId = "272476317952246288";//TestDataRepository.getChatRoomId(EMClient.getInstance().getCurrentUser());
+    LiveRoom liveRoom = getIntent().getParcelableExtra("liveroom");
+    if(liveRoom==null){
+      finish();
+      return;
+    }
+    liveId = liveRoom.getId();
+    chatroomId = liveRoom.getChatroomId();
     anchorId = EMClient.getInstance().getCurrentUser();
     usernameView.setText(anchorId);
     initEnv();

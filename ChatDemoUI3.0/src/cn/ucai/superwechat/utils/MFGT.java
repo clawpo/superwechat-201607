@@ -6,6 +6,7 @@ import android.content.Intent;
 
 import cn.ucai.superwechat.I;
 import cn.ucai.superwechat.R;
+import cn.ucai.superwechat.live.data.model.LiveRoom;
 import cn.ucai.superwechat.live.ui.activity.LiveDetailsActivity;
 import cn.ucai.superwechat.live.ui.activity.StartLiveActivity;
 import cn.ucai.superwechat.ui.AddContactActivity;
@@ -99,10 +100,16 @@ public class MFGT {
     public static void gotoPublicGroup(Activity context) {
         startActivity(context, PublicGroupsActivity.class);
     }
-    public static void gotoStartLive(Context context) {
-        startActivity((Activity) context, StartLiveActivity.class);
+    public static void gotoStartLive(Context context,LiveRoom liveRoom) {
+        Intent intent = new Intent();
+        intent.setClass(context,StartLiveActivity.class);
+        intent.putExtra("liveroom",liveRoom);
+        startActivity(context, intent);
     }
-    public static void gotoLiveDetails(Context context) {
-        startActivity((Activity) context, LiveDetailsActivity.class);
+    public static void gotoLiveDetails(Context context,LiveRoom liveRoom) {
+        Intent intent = new Intent();
+        intent.setClass(context,LiveDetailsActivity.class);
+        intent.putExtra("liveroom",liveRoom);
+        startActivity(context, intent);
     }
 }

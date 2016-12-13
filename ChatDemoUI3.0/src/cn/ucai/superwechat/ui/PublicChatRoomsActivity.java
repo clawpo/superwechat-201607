@@ -427,12 +427,12 @@ public class PublicChatRoomsActivity extends BaseActivity {
 
         @Override
         public int getItemCount() {
-            return liveRoomList.size() + 1;
+            return liveRoomList!= null ? liveRoomList.size() + 1 : 1;
         }
 
         @Override
         public int getItemViewType(int position) {
-            if (position == liveRoomList.size()) {
+            if (position == getItemCount() - 1) {
                 return Constant.ACTION_TYPE_FOOTER;
             }
             return Constant.ACTION_TYPE_ITEM;

@@ -23,7 +23,6 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.ucai.superwechat.R;
-import cn.ucai.superwechat.live.data.TestDataRepository;
 
 public class SearchActivity extends AppCompatActivity {
 
@@ -69,23 +68,23 @@ public class SearchActivity extends AppCompatActivity {
     private void searchUser(String searchText){
         //没有实际服务器数据，这里只搜索主播
         searchList.clear();
-        String[] anchorIds = TestDataRepository.anchorIds;
-        for(String anchor : anchorIds){
-            if(anchor.contains(searchText.trim()) || anchor.equals(searchText.trim())){
-                searchList.add(anchor);
-            }
-        }
-        if(searchList.size() == 0){
-            emptyView.setVisibility(View.VISIBLE);
-        }else{
-            emptyView.setVisibility(View.INVISIBLE);
-        }
-        if(adapter == null){
-            adapter = new SearchAdapter(this, searchList);
-            recyclerView.setAdapter(adapter);
-        }else{
-            adapter.notifyDataSetChanged();
-        }
+//        String[] anchorIds = TestDataRepository.anchorIds;
+//        for(String anchor : anchorIds){
+//            if(anchor.contains(searchText.trim()) || anchor.equals(searchText.trim())){
+//                searchList.add(anchor);
+//            }
+//        }
+//        if(searchList.size() == 0){
+//            emptyView.setVisibility(View.VISIBLE);
+//        }else{
+//            emptyView.setVisibility(View.INVISIBLE);
+//        }
+//        if(adapter == null){
+//            adapter = new SearchAdapter(this, searchList);
+//            recyclerView.setAdapter(adapter);
+//        }else{
+//            adapter.notifyDataSetChanged();
+//        }
 
     }
 

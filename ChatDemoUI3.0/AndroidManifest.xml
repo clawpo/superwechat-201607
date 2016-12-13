@@ -487,6 +487,17 @@
 
         <activity android:name=".ui.GuideActivity">
         </activity>
+        <!--live begin-->
+        <activity
+            android:name=".live.ui.activity.StartLiveActivity"
+            android:screenOrientation="portrait">
+        </activity>
+
+        <activity
+            android:name=".live.ui.activity.LiveDetailsActivity"
+            android:screenOrientation="portrait">
+        </activity>
+        <!--live end-->
     </application>
 
 </manifest>

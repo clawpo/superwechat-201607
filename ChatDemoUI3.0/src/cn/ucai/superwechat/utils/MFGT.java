@@ -99,10 +99,10 @@ public class MFGT {
     public static void gotoPublicGroup(Activity context) {
         startActivity(context, PublicGroupsActivity.class);
     }
-    public static void gotoStartLive(Activity context) {
-        startActivity(context, StartLiveActivity.class);
+    public static void gotoStartLive(Context context) {
+        startActivity((Activity) context, StartLiveActivity.class);
     }
-    public static void gotoLiveDetails(Activity context) {
-        startActivity(context, LiveDetailsActivity.class);
+    public static void gotoLiveDetails(Context context) {
+        startActivity((Activity) context, LiveDetailsActivity.class);
     }
 }

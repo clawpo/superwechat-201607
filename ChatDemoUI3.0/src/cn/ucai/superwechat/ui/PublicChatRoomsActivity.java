@@ -47,6 +47,7 @@ import butterknife.ButterKnife;
 import cn.ucai.superwechat.Constant;
 import cn.ucai.superwechat.R;
 import cn.ucai.superwechat.live.data.model.LiveRoom;
+import cn.ucai.superwechat.utils.MFGT;
 
 public class PublicChatRoomsActivity extends BaseActivity {
     private ProgressBar pb;
@@ -422,6 +423,12 @@ public class PublicChatRoomsActivity extends BaseActivity {
                         .load(liveRoomList.get(position).getCover())
                         .placeholder(R.color.placeholder)
                         .into(hv.imageView);
+                String username = EMClient.getInstance().getCurrentUser();
+				if(liveRoom.getAnchorId().equals(username)){
+					MFGT.gotoStartLive(context);
+				}else{
+					MFGT.gotoLiveDetails(context);
+				}
             }
         }
 

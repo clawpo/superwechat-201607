@@ -416,19 +416,24 @@ public class PublicChatRoomsActivity extends BaseActivity {
                 vh.mLoadingBar.setVisibility(isMore?View.VISIBLE:View.GONE);
             } else {
                 LiveViewHolder hv = (LiveViewHolder) holder;
-                LiveRoom liveRoom = liveRoomList.get(position);
+                final LiveRoom liveRoom = liveRoomList.get(position);
                 hv.anchor.setText(liveRoom.getName());
                 hv.audienceNum.setText(liveRoom.getAudienceNum() + "人");
                 Glide.with(context)
                         .load(liveRoomList.get(position).getCover())
                         .placeholder(R.color.placeholder)
                         .into(hv.imageView);
-                String username = EMClient.getInstance().getCurrentUser();
-				if(liveRoom.getAnchorId().equals(username)){
-					MFGT.gotoStartLive(context);
-				}else{
-					MFGT.gotoLiveDetails(context);
-				}
+                hv.itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        String username = EMClient.getInstance().getCurrentUser();
+                        if(liveRoom.getAnchorId().equals(username)){
+                            MFGT.gotoStartLive(context);
+                        }else{
+                            MFGT.gotoLiveDetails(context);
+                        }
+                    }
+                });
             }
         }
 

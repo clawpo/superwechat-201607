@@ -74,6 +74,8 @@ public class StartLiveActivity extends LiveBaseActivity
     protected boolean isShutDownCountdown = false;
     @BindView(R.id.iv_useravatar)
     ImageView mIvUseravatar;
+    @BindView(R.id.img_bt_close)
+    ImageView mClose;
     private LiveSettings mSettings;
     private UStreamingProfile mStreamingProfile;
     UEasyStreaming.UEncodingType encodingType;
@@ -260,6 +262,7 @@ public class StartLiveActivity extends LiveBaseActivity
 //        coverImage.setImageResource(liveRoom.getCover());
 //      }
 //    }
+        mClose.setEnabled(false);
         View view = liveEndLayout.inflate();
         Button closeConfirmBtn = (Button) view.findViewById(R.id.live_close_confirm);
         TextView usernameView = (TextView) view.findViewById(R.id.tv_username);

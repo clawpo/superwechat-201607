@@ -30,10 +30,10 @@
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
         >
-      <com.hyphenate.easeui.widget.EaseImageView
+      <ImageView
+          android:id="@+id/iv_useravatar"
           android:layout_width="30dp"
           android:layout_height="30dp"
-          app:ease_shape_type="round"
           android:src="@drawable/ease_default_avatar"
           />
 

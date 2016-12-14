@@ -263,7 +263,8 @@ public class StartLiveActivity extends LiveBaseActivity
         View view = liveEndLayout.inflate();
         Button closeConfirmBtn = (Button) view.findViewById(R.id.live_close_confirm);
         TextView usernameView = (TextView) view.findViewById(R.id.tv_username);
-        usernameView.setText(EMClient.getInstance().getCurrentUser());
+        usernameView.setText(EaseUserUtils.getCurrentAppUserInfo().getMUserNick());
+        EaseUserUtils.setCurentAppUserAvatar(this, (ImageView) view.findViewById(R.id.finish_iv_useravatar));
         closeConfirmBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

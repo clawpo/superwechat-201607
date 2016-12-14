@@ -13,7 +13,8 @@
       android:orientation="vertical"
       android:gravity="center_horizontal"
       >
-    <com.hyphenate.easeui.widget.EaseImageView
+    <ImageView
+        android:id="@+id/finish_iv_useravatar"
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:src="@drawable/ease_default_avatar"

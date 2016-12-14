@@ -29,6 +29,8 @@ import com.ucloud.live.UEasyStreaming;
 import com.ucloud.live.UStreamingProfile;
 import com.ucloud.live.widget.UAspectFrameLayout;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Random;
 
 import butterknife.BindView;
@@ -80,6 +82,9 @@ public class StartLiveActivity extends LiveBaseActivity
     private UStreamingProfile mStreamingProfile;
     UEasyStreaming.UEncodingType encodingType;
 
+
+    long startTime;
+    long aTime = 8*60*60*1000;
     boolean isStarted;
 
     private Handler handler = new Handler() {
@@ -149,6 +154,7 @@ public class StartLiveActivity extends LiveBaseActivity
                 Toast.makeText(this, event.toString(), Toast.LENGTH_LONG).show();
                 break;
             case UEasyStreaming.State.START_RECORDING:
+                startTime = System.currentTimeMillis();
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
@@ -262,12 +268,19 @@ public class StartLiveActivity extends LiveBaseActivity
 //        coverImage.setImageResource(liveRoom.getCover());
 //      }
 //    }
+        long endTime = System.currentTimeMillis();
+        long liveTime = endTime-startTime - aTime;
+        SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
+        String t = format.format(new Date(liveTime));
+
         mClose.setEnabled(false);
         View view = liveEndLayout.inflate();
         Button closeConfirmBtn = (Button) view.findViewById(R.id.live_close_confirm);
         TextView usernameView = (TextView) view.findViewById(R.id.tv_username);
         usernameView.setText(EaseUserUtils.getCurrentAppUserInfo().getMUserNick());
         EaseUserUtils.setCurentAppUserAvatar(this, (ImageView) view.findViewById(R.id.finish_iv_useravatar));
+        TextView finishLiveTime = (TextView) view.findViewById(R.id.finish_live_time);
+        finishLiveTime.setText(t);
         closeConfirmBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

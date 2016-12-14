@@ -18,7 +18,8 @@
       android:gravity="center_horizontal"
       android:background="@android:color/transparent"
       >
-    <com.hyphenate.easeui.widget.EaseImageView
+    <ImageView
+        android:id="@+id/detail_user_avatar"
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:src="@drawable/ease_default_avatar"

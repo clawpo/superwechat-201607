@@ -25,6 +25,7 @@ import com.hyphenate.chat.EMCmdMessageBody;
 import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMTextMessageBody;
+import com.hyphenate.easeui.utils.EaseUserUtils;
 import com.hyphenate.exceptions.HyphenateException;
 import com.hyphenate.util.EMLog;
 
@@ -37,6 +38,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.ucai.superwechat.Constant;
+import cn.ucai.superwechat.I;
 import cn.ucai.superwechat.R;
 import cn.ucai.superwechat.live.data.TestAvatarRepository;
 import cn.ucai.superwechat.live.ui.widget.BarrageLayout;
@@ -299,6 +301,7 @@ public abstract class LiveBaseActivity extends BaseActivity {
               message.setAttribute(Constant.EXTRA_IS_BARRAGE_MSG, true);
               barrageLayout.addBarrage(content, EMClient.getInstance().getCurrentUser());
             }
+            message.setAttribute(I.User.NICK, EaseUserUtils.getCurrentAppUserInfo().getMUserNick());
             message.setChatType(EMMessage.ChatType.ChatRoom);
             EMClient.getInstance().chatManager().sendMessage(message);
             message.setMessageStatusCallback(new EMCallBack() {

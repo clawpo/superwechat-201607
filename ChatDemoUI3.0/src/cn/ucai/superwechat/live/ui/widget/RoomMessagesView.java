@@ -20,7 +20,9 @@ import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMTextMessageBody;
+import com.hyphenate.exceptions.HyphenateException;
 
+import cn.ucai.superwechat.I;
 import cn.ucai.superwechat.R;
 
 /**
@@ -165,6 +167,12 @@ public class RoomMessagesView extends RelativeLayout{
         public void onBindViewHolder(MyViewHolder holder, int position) {
             final EMMessage message = messages[position];
             holder.name.setText(message.getFrom());
+            try {
+                String nick = message.getStringAttribute(I.User.NICK);
+                holder.name.setText(nick);
+            } catch (HyphenateException e) {
+                e.printStackTrace();
+            }
             holder.content.setText(((EMTextMessageBody)message.getBody()).getMessage());
             holder.itemView.setOnClickListener(new OnClickListener() {
                 @Override public void onClick(View v) {

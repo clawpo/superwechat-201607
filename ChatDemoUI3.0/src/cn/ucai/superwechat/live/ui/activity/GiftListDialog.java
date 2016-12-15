@@ -22,6 +22,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
@@ -191,6 +193,12 @@ public class GiftListDialog extends DialogFragment {
             if (mList != null) {
                 mList.clear();
             }
+            Collections.sort(list, new Comparator<Gift>() {
+                @Override
+                public int compare(Gift lhs, Gift rhs) {
+                    return lhs.getGprice()-rhs.getGprice();
+                }
+            });
             mList.addAll(list);
             notifyDataSetChanged();
         }

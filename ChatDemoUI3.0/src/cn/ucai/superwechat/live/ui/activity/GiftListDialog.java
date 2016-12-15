@@ -21,8 +21,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.hyphenate.easeui.utils.EaseUserUtils;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -179,7 +177,8 @@ public class GiftListDialog extends DialogFragment {
             GiftViewHolder gh = (GiftViewHolder)holder;
             gh.mTvGiftName.setText(gift.getGname());
             gh.mTvGiftPrice.setText(String.valueOf(gift.getGprice()));
-            EaseUserUtils.setAppUserPathAvatar(getActivity(),gift.getGurl(),gh.mIvGiftThumb);
+            gh.mIvGiftThumb.setImageResource(getGiftImageRes(gift.getId()));
+//            EaseUserUtils.setAppUserPathAvatar(getActivity(),gift.getGurl(),gh.mIvGiftThumb);
             gh.mLayoutGoods.setTag(gift.getId());
         }
 
@@ -218,7 +217,7 @@ public class GiftListDialog extends DialogFragment {
             }
         }
     }
-    private int setGiftImage(int id) {
+    private int getGiftImageRes(int id) {
         Context context = SuperWeChatApplication.getInstance().getApplicationContext();
         String name = "hani_gift_"+id;
         int resId = context.getResources().getIdentifier(name,"drawable",context.getPackageName());

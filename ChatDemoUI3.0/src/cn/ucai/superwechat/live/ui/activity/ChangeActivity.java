@@ -13,6 +13,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.ucai.superwechat.R;
+import cn.ucai.superwechat.SuperWeChatHelper;
 import cn.ucai.superwechat.bean.Result;
 import cn.ucai.superwechat.data.NetDao;
 import cn.ucai.superwechat.data.OkHttpUtils;
@@ -53,6 +54,7 @@ public class ChangeActivity extends cn.ucai.superwechat.ui.BaseActivity {
         //add loading view
         loadingView = LayoutInflater.from(this).inflate(R.layout.rp_loading, contentContainer, false);
         contentContainer.addView(loadingView);
+        change = Integer.parseInt(SuperWeChatHelper.getInstance().getCurrentUsernChange());
         setChangeText(change);
 
         NetDao.loadChange(this, EMClient.getInstance().getCurrentUser(), new OkHttpUtils.OnCompleteListener<String>() {
@@ -64,6 +66,7 @@ public class ChangeActivity extends cn.ucai.superwechat.ui.BaseActivity {
                         Wallet wallet = (Wallet) result.getRetData();
                         if (wallet != null) {
                             setChangeText(wallet.getBalance());
+                            SuperWeChatHelper.getInstance().setCurrentUserChange(wallet.getBalance().toString());
                         } else {
                             setChangeText(0);
                         }

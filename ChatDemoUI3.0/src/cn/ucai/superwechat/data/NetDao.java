@@ -170,4 +170,15 @@ public class NetDao {
                 .execute(listener);
     }
 
+    public static void gvingGift(Context context, String username, String anchorId, int gid, OkHttpUtils.OnCompleteListener<String> listener){
+        OkHttpUtils<String> utils = new OkHttpUtils<>(context);
+        utils.setRequestUrl(I.REQUEST_GIVING_GIFT)
+                .addParam(I.Live.USERNAME,username)
+                .addParam(I.Live.ANCHORID,anchorId)
+                .addParam(I.Live.GID,String.valueOf(gid))
+                .addParam(I.Live.GNUM,"1")
+                .targetClass(String.class)
+                .execute(listener);
+    }
+
 }

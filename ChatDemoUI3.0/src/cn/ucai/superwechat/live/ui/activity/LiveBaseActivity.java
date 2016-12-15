@@ -1,6 +1,8 @@
 package cn.ucai.superwechat.live.ui.activity;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
@@ -39,12 +41,19 @@ import butterknife.OnClick;
 import cn.ucai.superwechat.Constant;
 import cn.ucai.superwechat.I;
 import cn.ucai.superwechat.R;
+import cn.ucai.superwechat.SuperWeChatHelper;
+import cn.ucai.superwechat.bean.Result;
+import cn.ucai.superwechat.data.NetDao;
+import cn.ucai.superwechat.data.OkHttpUtils;
 import cn.ucai.superwechat.live.data.TestAvatarRepository;
+import cn.ucai.superwechat.live.data.model.Gift;
+import cn.ucai.superwechat.live.data.model.Wallet;
 import cn.ucai.superwechat.live.ui.widget.BarrageLayout;
 import cn.ucai.superwechat.live.ui.widget.LiveLeftGiftView;
 import cn.ucai.superwechat.live.ui.widget.PeriscopeLayout;
 import cn.ucai.superwechat.live.ui.widget.RoomMessagesView;
 import cn.ucai.superwechat.live.utils.Utils;
+import cn.ucai.superwechat.utils.ResultUtils;
 
 
 /**
@@ -375,7 +384,7 @@ public abstract class LiveBaseActivity extends BaseActivity {
       public void onClick(View v) {
         dialog.dismiss();
         int gId = (int) v.getTag();
-        sendGiftMessage(gId);
+        payGift(gId);
       }
     });
 //    new RoomUserDetailsDialog.UserDetailsDialogListener() {
@@ -470,7 +479,51 @@ public abstract class LiveBaseActivity extends BaseActivity {
     showGiftListDialog();
   }
 
-  private void sendGiftMessage(int gid){
+  private void payGift(final int gid){
+    int change = Integer.parseInt(SuperWeChatHelper.getInstance().getCurrentUsernChange());
+    Gift gift = SuperWeChatHelper.getInstance().getAppGiftList().get(gid);
+    if(change>0 && change>gift.getGprice()){
+      //扣钱
+      NetDao.gvingGift(this, EMClient.getInstance().getCurrentUser(), anchorId, gid, new OkHttpUtils.OnCompleteListener<String>() {
+        @Override
+        public void onSuccess(String s) {
+          if (s != null) {
+            Result result = ResultUtils.getResultFromJson(s, Wallet.class);
+            if (result != null && result.isRetMsg()) {
+              Wallet wallet = (Wallet) result.getRetData();
+              if (wallet != null) {
+                //发送礼物
+                sendGift(gid);
+                SuperWeChatHelper.getInstance().setCurrentUserChange(wallet.getBalance().toString());
+              } else {
+
+              }
+            }
+          }
+        }
+
+        @Override
+        public void onError(String error) {
+
+        }
+      });
+    }else{
+      final AlertDialog.Builder builder = new AlertDialog.Builder(LiveBaseActivity.this);
+      builder.setTitle("提示");
+      builder.setMessage("余额不足,去充值吧!");
+      builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+        public void onClick(DialogInterface dialog, int which) {
+        }
+      });
+      builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+        public void onClick(DialogInterface dialog, int which) {
+        }
+      });
+      builder.create().show();
+    }
+  }
+
+  private void sendGift(int gid) {
     EMMessage message = EMMessage.createSendMessage(EMMessage.Type.CMD);
     message.setReceipt(chatroomId);
     EMCmdMessageBody cmdMessageBody = new EMCmdMessageBody(Constant.CMD_GIFT);

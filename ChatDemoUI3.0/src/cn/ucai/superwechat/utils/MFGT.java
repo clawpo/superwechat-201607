@@ -3,10 +3,12 @@ package cn.ucai.superwechat.utils;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.support.v4.app.FragmentActivity;
 
 import cn.ucai.superwechat.I;
 import cn.ucai.superwechat.R;
 import cn.ucai.superwechat.live.data.model.LiveRoom;
+import cn.ucai.superwechat.live.ui.activity.ChangeActivity;
 import cn.ucai.superwechat.live.ui.activity.LiveDetailsActivity;
 import cn.ucai.superwechat.live.ui.activity.StartLiveActivity;
 import cn.ucai.superwechat.ui.AddContactActivity;
@@ -111,5 +113,9 @@ public class MFGT {
         intent.setClass(context,LiveDetailsActivity.class);
         intent.putExtra("liveroom",liveRoom);
         startActivity(context, intent);
+    }
+
+    public static void gotoChange(FragmentActivity activity) {
+        startActivity(activity, ChangeActivity.class);
     }
 }

@@ -14,6 +14,10 @@ public interface I {
 	public static interface Gift {
 		String GID									=		"gift_id";
 	}
+
+	public static interface Live {
+		String USERNAME								=		"uname";
+	}
 	
 	public static interface Contact {
 		String TABLE_NAME 							= 		"t_superwechat_contact";

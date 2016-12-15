@@ -118,15 +118,12 @@ public class GiftListDialog extends DialogFragment {
     }
 
 
-    private UserDetailsDialogListener dialogListener;
 
-    public void setUserDetailsDialogListener(UserDetailsDialogListener dialogListener) {
-        this.dialogListener = dialogListener;
+    View.OnClickListener mListener;
+    public void setGiftDialogListener(View.OnClickListener dialogListener) {
+        this.mListener = dialogListener;
     }
 
-    interface UserDetailsDialogListener {
-        void onMentionClick(String username);
-    }
 
 
     @Override
@@ -182,6 +179,7 @@ public class GiftListDialog extends DialogFragment {
             gh.mIvGiftThumb.setImageResource(getGiftImageRes(gift.getId()));
 //            EaseUserUtils.setAppUserPathAvatar(getActivity(),gift.getGurl(),gh.mIvGiftThumb);
             gh.mLayoutGoods.setTag(gift.getId());
+            gh.itemView.setOnClickListener(mListener);
         }
 
         @Override

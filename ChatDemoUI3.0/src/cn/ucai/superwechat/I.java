@@ -10,6 +10,10 @@ public interface I {
 		String PASSWORD 							= 		"m_user_password";				//用户密码
 		String NICK 								= 		"m_user_nick";					//用户昵称
 	}
+
+	public static interface Gift {
+		String GID									=		"gift_id";
+	}
 	
 	public static interface Contact {
 		String TABLE_NAME 							= 		"t_superwechat_contact";

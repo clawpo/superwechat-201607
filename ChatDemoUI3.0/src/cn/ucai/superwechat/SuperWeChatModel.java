@@ -13,6 +13,7 @@ import java.util.Map;
 
 import cn.ucai.superwechat.db.UserDao;
 import cn.ucai.superwechat.domain.RobotUser;
+import cn.ucai.superwechat.live.data.model.Gift;
 import cn.ucai.superwechat.utils.PreferenceManager;
 
 public class SuperWeChatModel {
@@ -288,6 +289,16 @@ public class SuperWeChatModel {
     public void delAppContact(String username){
         UserDao dao = new UserDao(context);
         dao.deleteAppContact(username);
+    }
+
+    public void saveAppGiftList(ArrayList<Gift> mList) {
+        UserDao dao = new UserDao(context);
+        dao.saveAppGiftList(mList);
+    }
+
+    public Map<Integer, Gift> getAppGiftList() {
+        UserDao dao = new UserDao(context);
+        return dao.getAppGiftList();
     }
 
     enum Key{

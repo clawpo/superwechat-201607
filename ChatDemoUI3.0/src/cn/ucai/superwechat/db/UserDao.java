@@ -18,10 +18,12 @@ import android.content.Context;
 import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.domain.User;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import cn.ucai.superwechat.domain.RobotUser;
+import cn.ucai.superwechat.live.data.model.Gift;
 
 public class UserDao {
 	public static final String TABLE_NAME = "uers";
@@ -46,6 +48,12 @@ public class UserDao {
 	public static final String USER_COLUMN_AVATAR_SUFFIX = "m_user_avatar_suffix";
 	public static final String USER_COLUMN_AVATAR_TYPE = "m_user_avatar_type";
 	public static final String USER_COLUMN_AVATAR_LASTUPDATE_TIME = "m_user_avatar_lastupdate_time";
+
+	public static final String GIFT_TABLE_NAME = "t_superwechat_gift";
+	public static final String GIFT_COLUMN_ID = "gid";
+	public static final String GIFT_COLUMN_NAME = "gname";
+	public static final String GIFT_COLUMN_URL = "gurl";
+	public static final String GIFT_COLUMN_PRICE = "gprice";
 	
 	
 	public UserDao(Context context) {
@@ -129,5 +137,13 @@ public class UserDao {
 	 */
 	public void deleteAppContact(String username){
 		SuperWeChatDBManager.getInstance().deleteAppContact(username);
+	}
+
+	public void saveAppGiftList(ArrayList<Gift> mList) {
+		SuperWeChatDBManager.getInstance().saveAppGiftList(mList);
+	}
+
+	public Map<Integer, Gift> getAppGiftList() {
+		return SuperWeChatDBManager.getInstance().getAppGiftList();
 	}
 }

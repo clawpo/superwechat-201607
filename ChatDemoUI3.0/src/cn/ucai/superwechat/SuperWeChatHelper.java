@@ -58,6 +58,7 @@ import cn.ucai.superwechat.domain.EmojiconExampleGroupData;
 import cn.ucai.superwechat.domain.InviteMessage;
 import cn.ucai.superwechat.domain.InviteMessage.InviteMesageStatus;
 import cn.ucai.superwechat.domain.RobotUser;
+import cn.ucai.superwechat.live.data.model.Gift;
 import cn.ucai.superwechat.parse.UserProfileManager;
 import cn.ucai.superwechat.receiver.CallReceiver;
 import cn.ucai.superwechat.ui.ChatActivity;
@@ -100,6 +101,7 @@ public class SuperWeChatHelper {
 	private SuperWeChatModel demoModel = null;
 
     private Map<String, User> appContactList;
+    private Map<Integer, Gift> appGiftList;
 	
 	/**
      * sync groups status listener
@@ -1397,5 +1399,55 @@ public class SuperWeChatHelper {
     public void delAppContact(String username){
         getAppContactList().remove(username);
         demoModel.delAppContact(username);
+    }
+
+    /**
+     * update gift list
+     *
+     * @param giftList
+     */
+    public void setAppGiftList(Map<Integer, Gift> giftList) {
+        if(giftList == null){
+            if (appGiftList != null) {
+                appGiftList.clear();
+            }
+            return;
+        }
+
+        appGiftList = giftList;
+    }
+
+    /**
+     * get gift list
+     *
+     * @return
+     */
+    public Map<Integer, Gift> getAppGiftList() {
+        L.e(TAG,"getAppGiftList,appGiftList="+appGiftList);
+        if (appGiftList == null || appGiftList.size()==0) {
+            appGiftList = demoModel.getAppGiftList();
+        }
+
+        // return a empty non-null object to avoid app crash
+        if(appGiftList == null){
+            return new Hashtable<Integer, Gift>();
+        }
+
+        L.e(TAG,"getAppGiftList,appGiftList="+appGiftList.size());
+        return appGiftList;
+    }
+
+    /**
+     * update gift list to cache and database
+     *
+     * @param giftList
+     */
+    public void updateAppGiftList(List<Gift> giftList) {
+        for (Gift g : giftList) {
+            appGiftList.put(g.getId(),g);
+        }
+        ArrayList<Gift> mList = new ArrayList<Gift>();
+        mList.addAll(appGiftList.values());
+        demoModel.saveAppGiftList(mList);
     }
 }

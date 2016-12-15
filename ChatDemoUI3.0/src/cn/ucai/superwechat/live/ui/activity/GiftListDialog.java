@@ -25,15 +25,19 @@ import com.hyphenate.easeui.utils.EaseUserUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import cn.ucai.superwechat.R;
+import cn.ucai.superwechat.SuperWeChatApplication;
+import cn.ucai.superwechat.SuperWeChatHelper;
 import cn.ucai.superwechat.bean.Result;
 import cn.ucai.superwechat.data.NetDao;
 import cn.ucai.superwechat.data.OkHttpUtils;
 import cn.ucai.superwechat.live.data.model.Gift;
+import cn.ucai.superwechat.utils.L;
 import cn.ucai.superwechat.utils.ResultUtils;
 
 /**
@@ -83,23 +87,34 @@ public class GiftListDialog extends DialogFragment {
     }
 
     private void loadGiftList() {
-        NetDao.loadGiftList(getContext(), new OkHttpUtils.OnCompleteListener<String>() {
-            @Override
-            public void onSuccess(String s) {
-                Result result = ResultUtils.getListResultFromJson(s, Gift.class);
-                if (result != null && result.isRetMsg()) {
-                    List<Gift> list = (List<Gift>) result.getRetData();
-                    if (list != null && list.size()>0) {
-                        mAdapter.initData(list);
+        Map<Integer, Gift> appGiftList = SuperWeChatHelper.getInstance().getAppGiftList();
+        if(appGiftList!=null && !appGiftList.isEmpty()){
+            L.e("main","map="+appGiftList.size());
+            final List<Gift> allGiftList = new ArrayList<Gift>();
+            for (Gift gift : appGiftList.values()) {
+                allGiftList.add(gift);
+            }
+            mAdapter.initData(allGiftList);
+        }else {
+            NetDao.loadGiftList(getContext(), new OkHttpUtils.OnCompleteListener<String>() {
+                @Override
+                public void onSuccess(String s) {
+                    Result result = ResultUtils.getListResultFromJson(s, Gift.class);
+                    if (result != null && result.isRetMsg()) {
+                        List<Gift> list = (List<Gift>) result.getRetData();
+                        if (list != null && list.size() > 0) {
+                            mAdapter.initData(list);
+                            SuperWeChatHelper.getInstance().updateAppGiftList(list);
+                        }
                     }
                 }
-            }
 
-            @Override
-            public void onError(String error) {
+                @Override
+                public void onError(String error) {
 
-            }
-        });
+                }
+            });
+        }
     }
 
 
@@ -202,5 +217,11 @@ public class GiftListDialog extends DialogFragment {
 //                mLayoutGoods.setOnClickListener(mListener);
             }
         }
+    }
+    private int setGiftImage(int id) {
+        Context context = SuperWeChatApplication.getInstance().getApplicationContext();
+        String name = "hani_gift_"+id;
+        int resId = context.getResources().getIdentifier(name,"drawable",context.getPackageName());
+        return resId;
     }
 }
